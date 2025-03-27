@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admins', function (Blueprint $table) {
+        Schema::create('workers', function (Blueprint $table) {
             $table->ulid('id')->primary(); // Унікальний ідентифікатор ULID
             $table->foreignUlid('user_id')->constrained('users')->cascadeOnDelete(); // Посилання на users
             $table->enumAlterColumn('position', 'position', Position::class);
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admins');
+        Schema::dropIfExists('workers');
     }
 };

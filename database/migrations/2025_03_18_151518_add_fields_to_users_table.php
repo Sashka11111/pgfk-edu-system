@@ -17,6 +17,11 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->enumAlterColumn('role', 'role', Role::class, default: Role::STUDENT->value);
         });
+        Schema::table('sessions', function (Blueprint $table) {
+            $table->dropIndex(['user_id']);
+            $table->dropColumn('user_id');
+            $table->foreignUlid('user_id')->nullable()->index();
+        });
     }
 
     /**
@@ -25,7 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            Schema::dropIfExists('users');
         });
     }
 };

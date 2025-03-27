@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
-class Admin extends Model
+class Worker extends Model
 {
     use HasFactory, HasUlids;
 
-    protected $table = 'admins';
+    protected $table = 'workers';
 
     protected $fillable = [
         'user_id',

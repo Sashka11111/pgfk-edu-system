@@ -2,6 +2,7 @@
 
 namespace Liamtseva\PGFKEduSystem\Models;
 
+use Filament\Tables\Columns\Layout\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,7 +35,20 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function isAuthenticated(): bool
+    {
+        return auth()->check();  // Перевіряє, чи користувач аутентифікований
+    }
 
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->isAdmin();
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role == Role::ADMIN;
+    }
     /**
      * Автоматичне приведення типів.
      *

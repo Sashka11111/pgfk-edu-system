@@ -3,7 +3,11 @@
 namespace Liamtseva\PGFKEduSystem\Enums;
 
 
-enum Role: string //implements HasLabel, HasColor, HasIcon
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
+
+enum Role: string implements HasLabel, HasColor, HasIcon
 {
     case STUDENT = 'student';
     case TEACHER = 'teacher';
@@ -24,12 +28,12 @@ enum Role: string //implements HasLabel, HasColor, HasIcon
     /**
      * Повертає колір для Filament
      */
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::STUDENT => 'primary',   // Блакитний у Filament
             self::TEACHER => 'success',   // Зелений у Filament
-            self::ADMIN => 'danger',      // Червоний у Filament
+            self::ADMIN => 'info',      // Червоний у Filament
         };
     }
 
@@ -41,7 +45,7 @@ enum Role: string //implements HasLabel, HasColor, HasIcon
         return match ($this) {
             self::STUDENT => 'heroicon-o-user',         // Іконка користувача
             self::TEACHER => 'heroicon-o-academic-cap', // Іконка викладача
-            self::ADMIN => 'heroicon-o-shield-check',   // Іконка адміністратора
+            self::ADMIN => 'heroicon-o-key',   // Іконка адміністратора
         };
     }
 }

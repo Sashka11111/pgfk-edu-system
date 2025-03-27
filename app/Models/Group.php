@@ -31,7 +31,7 @@ class Group extends Model
     /**
      * Отримати викладача-куратора групи.
      */
-    public function curator()
+    public function teacher()
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
