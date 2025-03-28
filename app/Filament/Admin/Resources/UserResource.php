@@ -150,12 +150,10 @@ class UserResource extends Resource
                     ->icon('heroicon-o-trash'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->icon('heroicon-o-trash'),
-                ]),
-            ])
-            ->defaultSort('created_at', 'desc'); // Сортування за датою створення
+                Tables\Actions\DeleteBulkAction::make()
+                    ->icon('heroicon-o-trash'),
+
+            ]);
     }
 
     public static function getRelations(): array

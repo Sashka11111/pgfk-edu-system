@@ -3,6 +3,7 @@
 namespace Liamtseva\PGFKEduSystem\Filament\Admin\Resources;
 
 use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -16,6 +17,8 @@ use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\GroupResource\Pages\CreateG
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\GroupResource\Pages\EditGroup;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\GroupResource\Pages\ListGroups;
 use Liamtseva\PGFKEduSystem\Models\Group;
+use Liamtseva\PGFKEduSystem\Models\Specialty;
+use Liamtseva\PGFKEduSystem\Models\Teacher;
 
 class GroupResource extends Resource
 {
@@ -23,7 +26,7 @@ class GroupResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Групи';
-    protected static ?string $modelLabel = 'група';
+    protected static ?string $modelLabel = 'групу';
     protected static ?string $pluralLabel = 'Групи';
     protected static ?string $navigationGroup = 'Навчальний процес';
     protected static ?int $navigationSort = 3;
@@ -42,7 +45,7 @@ class GroupResource extends Resource
                             ->maxLength(255)
                             ->placeholder('Введіть назву групи (наприклад, АА-11)')
                             ->autofocus()
-                            ->unique(Group::class, 'name')
+                            ->unique(Group::class, 'name',ignoreRecord: true)
                             ->prefixIcon('heroicon-o-identification')
                             ->hint('Назва має бути унікальною'),
 
@@ -61,20 +64,41 @@ class GroupResource extends Resource
                         Select::make('specialty_id')
                             ->label('Спеціальність')
                             ->relationship('specialty', 'name')
-                            ->nullable()
                             ->searchable()
                             ->preload()
+                            ->required()
                             ->placeholder('Оберіть спеціальність')
                             ->prefixIcon('heroicon-o-book-open'),
 
                         Select::make('teacher_id')
                             ->label('Куратор')
-                            ->relationship('user', 'name')
-                            ->nullable()
+                            ->options(function () {
+                                return Teacher::with('user')
+                                    ->get()
+                                    ->pluck('user.name', 'id')
+                                    ->all();
+                            })
+                            ->required()
                             ->searchable()
                             ->preload()
                             ->placeholder('Оберіть куратора')
                             ->prefixIcon('heroicon-o-user'),
+
+                        DateTimePicker::make('created_at')
+                            ->label('Дата створення')
+                            ->prefixIcon('heroicon-o-calendar')
+                            ->displayFormat('d.m.Y H:i')
+                            ->disabled()
+                            ->default(now())
+                            ->hiddenOn('create'),
+
+                        DateTimePicker::make('updated_at')
+                            ->label('Дата оновлення')
+                            ->prefixIcon('heroicon-o-clock')
+                            ->displayFormat('d.m.Y H:i')
+                            ->disabled()
+                            ->default(now())
+                            ->hiddenOn('create'),
                     ])
                     ->columns(2),
             ]);
@@ -140,6 +164,12 @@ class GroupResource extends Resource
                         3 => '3-й рік',
                         4 => '4-й рік',
                     ]),
+                SelectFilter::make('specialty_id')
+                    ->label('Фільтр за спеціальністю')
+                    ->options(function () {
+                        return Specialty::pluck('name', 'id')->all();
+                    })
+                    ->placeholder('Оберіть спеціальність'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -148,12 +178,10 @@ class GroupResource extends Resource
                     ->icon('heroicon-o-trash'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->icon('heroicon-o-trash'),
-                ]),
-            ])
-            ->defaultSort('name', 'asc');
+                Tables\Actions\DeleteBulkAction::make()
+                    ->icon('heroicon-o-trash'),
+
+            ]);
     }
 
     public static function getRelations(): array

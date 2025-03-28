@@ -2,7 +2,9 @@
 
 namespace Liamtseva\PGFKEduSystem\Enums;
 
-enum Department: string //implements HasLabel
+use Filament\Support\Contracts\HasLabel;
+
+enum Department: string implements HasLabel
 {
     case PART_1 = 'department_part_1';
     case PART_2 = 'department_part_2';

@@ -2,7 +2,11 @@
 
 namespace Liamtseva\PGFKEduSystem\Enums;
 
-enum Qualification: string
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
+
+enum Qualification: string implements HasLabel, HasColor, HasIcon
 {
     case MASTER = 'master';         // Магістр
     case CANDIDATE = 'candidate';   // Кандидат наук

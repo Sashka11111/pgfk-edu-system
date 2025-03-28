@@ -25,8 +25,4 @@ class Teacher extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function getFullNameAttribute()
-    {
-        return $this->user ? $this->user->name : 'Не вказано';
-    }
 }

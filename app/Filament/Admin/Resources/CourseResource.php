@@ -152,12 +152,10 @@ class CourseResource extends Resource
                     ->icon('heroicon-o-trash'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->icon('heroicon-o-trash'), // Іконка видалення
-                ]),
-            ])
-            ->defaultSort('created_at', 'desc'); // Сортування за датою створення
+                Tables\Actions\DeleteBulkAction::make()
+                    ->icon('heroicon-o-trash'),
+
+            ]);
     }
 
     public static function getPages(): array

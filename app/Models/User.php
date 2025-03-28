@@ -12,7 +12,7 @@ use Liamtseva\PGFKEduSystem\Enums\Role;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasUlids;
-
+    protected $table = 'users';
     /**
      * Масово заповнювані атрибути.
      *

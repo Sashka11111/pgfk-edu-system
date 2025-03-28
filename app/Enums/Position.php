@@ -2,7 +2,11 @@
 
 namespace Liamtseva\PGFKEduSystem\Enums;
 
-enum Position: string
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
+
+enum Position: string implements HasLabel, HasColor, HasIcon
 {
     case DIRECTOR = 'director';             // Директор
     case DEPUTY_DIRECTOR = 'deputy';        // Заступник директора
