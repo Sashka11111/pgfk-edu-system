@@ -28,7 +28,7 @@ class GroupResource extends Resource
     protected static ?string $navigationLabel = 'Групи';
     protected static ?string $modelLabel = 'групу';
     protected static ?string $pluralLabel = 'Групи';
-    protected static ?string $navigationGroup = 'Навчальний процес';
+    protected static ?string $navigationGroup = 'Освітні налаштування';
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -83,6 +83,15 @@ class GroupResource extends Resource
                             ->preload()
                             ->placeholder('Оберіть куратора')
                             ->prefixIcon('heroicon-o-user'),
+
+                        Select::make('subjects')
+                            ->label('Предмети')
+                            ->relationship('subjects', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Оберіть предмети')
+                            ->prefixIcon('heroicon-o-book-open'),
 
                         DateTimePicker::make('created_at')
                             ->label('Дата створення')
@@ -142,6 +151,16 @@ class GroupResource extends Resource
                     ->sortable()
                     ->toggleable()
                     ->default('Не призначено'),
+
+                TextColumn::make('subjects.name')
+                    ->label('Предмети')
+                    ->badge()
+                    ->limitList(2)
+                    ->tooltip(fn ($record) => $record->subjects->pluck('name')->join(', '))
+                    ->separator(', ')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
 
                 TextColumn::make('created_at')
                     ->label('Дата створення')

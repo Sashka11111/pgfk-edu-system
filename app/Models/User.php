@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 
 class User extends Authenticatable
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'gender',
     ];
 
     /**
@@ -39,7 +41,6 @@ class User extends Authenticatable
     {
         return auth()->check();  // Перевіряє, чи користувач аутентифікований
     }
-
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->isAdmin();
@@ -47,7 +48,7 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role == Role::ADMIN;
+        return $this->role === Role::ADMIN;
     }
     /**
      * Автоматичне приведення типів.
@@ -58,5 +59,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'role' => Role::class,
+        'gender' => Gender::class,
     ];
 }

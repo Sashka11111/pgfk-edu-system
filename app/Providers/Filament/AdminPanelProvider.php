@@ -23,8 +23,8 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('admin')
-            ->path('admin')
+            ->id('dashboard')
+            ->path('dashboard')
             ->colors([
                 'primary' => "#4c1997",
             ])
@@ -32,14 +32,9 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('images/icon.png'))
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'Liamtseva\\PGFKEduSystem\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'Liamtseva\\PGFKEduSystem\\Filament\\Admin\\Pages')
-            ->pages([
-                Pages\Dashboard::class,
-            ])
+            ->pages([])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'Liamtseva\\PGFKEduSystem\\Filament\\Admin\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

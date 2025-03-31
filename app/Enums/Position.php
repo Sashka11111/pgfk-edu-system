@@ -44,9 +44,9 @@ enum Position: string implements HasLabel, HasColor, HasIcon
             self::DEPUTY_DIRECTOR => 'warning', // Жовтий
             self::HEAD_OF_DEPARTMENT => 'info', // Синій
             self::METHODIST => 'success',       // Зелений
-            self::SECRETARY => 'primary',       // Блакитний
-            self::ACCOUNTANT => 'purple',       // Фіолетовий (кастомний колір у Filament)
-            self::FACILITY_MANAGER => 'orange', // Помаранчевий (кастомний)
+            self::SECRETARY => 'primary',       // Фіолетовий
+            self::ACCOUNTANT => 'primary',       // Фіолетовий
+            self::FACILITY_MANAGER => 'gray', // Сірий
             self::ADMINISTRATOR => 'gray',      // Сірий
         };
     }
@@ -59,7 +59,7 @@ enum Position: string implements HasLabel, HasColor, HasIcon
         return match ($this) {
             self::DIRECTOR => 'heroicon-o-shield-check',
             self::DEPUTY_DIRECTOR => 'heroicon-o-user-group',
-            self::HEAD_OF_DEPARTMENT => 'heroicon-o-office-building',
+            self::HEAD_OF_DEPARTMENT => 'heroicon-o-building-office-2',
             self::METHODIST => 'heroicon-o-book-open',
             self::SECRETARY => 'heroicon-o-document-text',
             self::ACCOUNTANT => 'heroicon-o-calculator',

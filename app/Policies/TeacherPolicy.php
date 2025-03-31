@@ -2,15 +2,93 @@
 
 namespace Liamtseva\PGFKEduSystem\Policies;
 
+use Liamtseva\PGFKEduSystem\Enums\Role;
+use Liamtseva\PGFKEduSystem\Models\Teacher;
 use Liamtseva\PGFKEduSystem\Models\User;
 
 class TeacherPolicy
 {
     /**
-     * Create a new policy instance.
+     * Виконується перед усіма іншими методами політики.
+     * Адміністратор має доступ до всього.
      */
-    public function __construct()
+    public function before(User $user, string $ability): ?bool
     {
-        //
+        if ($user->role === Role::ADMIN) {
+            return true;
+        }
+
+        return null; // Продовжуємо перевірку інших правил
+    }
+
+    /**
+     * Перевіряє, чи може користувач переглядати список викладачів.
+     */
+    public function viewAny(User $user): bool
+    {
+        // Дозволяємо переглядати список викладачів адміністраторам і викладачам
+        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+    }
+
+    /**
+     * Перевіряє, чи може користувач переглядати конкретного викладача.
+     */
+    public function view(User $user, Teacher $teacher): bool
+    {
+        // Дозволяємо переглядати викладача:
+        // - Адміністраторам
+        // - Викладачам (власний профіль або всі профілі)
+        // - Студентам (можуть бачити профілі викладачів)
+        return $user->role === Role::ADMIN ||
+            $user->role === Role::TEACHER ||
+            $user->role === Role::STUDENT;
+    }
+
+    /**
+     * Перевіряє, чи може користувач створювати нових викладачів.
+     */
+    public function create(User $user): bool
+    {
+        // Тільки адміністратори можуть створювати викладачів
+        return $user->role === Role::ADMIN;
+    }
+
+    /**
+     * Перевіряє, чи може користувач редагувати викладача.
+     */
+    public function update(User $user, Teacher $teacher): bool
+    {
+        // Дозволяємо редагувати:
+        // - Адміністраторам
+        // - Викладачу (власний профіль)
+        return $user->role === Role::ADMIN ||
+            ($user->role === Role::TEACHER && $user->id === $teacher->user_id);
+    }
+
+    /**
+     * Перевіряє, чи може користувач видаляти викладача.
+     */
+    public function delete(User $user, Teacher $teacher): bool
+    {
+        // Тільки адміністратори можуть видаляти викладачів
+        return $user->role === Role::ADMIN;
+    }
+
+    /**
+     * Перевіряє, чи може користувач відновлювати видаленого викладача.
+     */
+    public function restore(User $user, Teacher $teacher): bool
+    {
+        // Тільки адміністратори можуть відновлювати викладачів
+        return $user->role === Role::ADMIN;
+    }
+
+    /**
+     * Перевіряє, чи може користувач остаточно видаляти викладача.
+     */
+    public function forceDelete(User $user, Teacher $teacher): bool
+    {
+        // Тільки адміністратори можуть остаточно видаляти викладачів
+        return $user->role === Role::ADMIN;
     }
 }

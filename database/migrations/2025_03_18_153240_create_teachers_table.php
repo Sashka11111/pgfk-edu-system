@@ -17,7 +17,6 @@ return new class extends Migration
             $table->ulid('id')->primary(); // Унікальний ідентифікатор ULID
             $table->foreignUlid('user_id')->constrained('users')->cascadeOnDelete(); // Посилання на users
             $table->enumAlterColumn('qualification', 'qualification', Qualification::class);
-            $table->enumAlterColumn('department', 'department', Department::class);
             $table->string('phone_number')->nullable(); // Номер телефону
             $table->integer('experience_years')->default(0); // Досвід роботи (у роках)
             $table->timestamps();

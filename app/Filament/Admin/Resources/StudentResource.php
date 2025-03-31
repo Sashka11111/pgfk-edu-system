@@ -3,6 +3,7 @@
 namespace Liamtseva\PGFKEduSystem\Filament\Admin\Resources;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -14,11 +15,14 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\StudentResource\Pages\CreateStudent;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\StudentResource\Pages\EditStudent;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\StudentResource\Pages\ListStudents;
 use Liamtseva\PGFKEduSystem\Models\Student;
 use Liamtseva\PGFKEduSystem\Models\Group;
+use Liamtseva\PGFKEduSystem\Models\User;
 
 class StudentResource extends Resource
 {
@@ -45,13 +49,30 @@ class StudentResource extends Resource
                             ->searchable()
                             ->preload()
                             ->required()
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('ПІБ')
+                                    ->required(),
+                                TextInput::make('email')
+                                    ->label('Email')
+                                    ->email()
+                                    ->required()
+                                    ->unique(User::class, 'email'),
+                                TextInput::make('password')
+                                    ->label('Пароль')
+                                    ->password()
+                                    ->required()
+                                    ->default(Str::random(12)), // Генерація випадкового пароля
+                            ])
                             ->placeholder('Оберіть користувача')
                             ->prefixIcon('heroicon-o-user-circle'),
+
 
                         TextInput::make('record_book_number')
                             ->label('Номер залікової книжки')
                             ->required()
-                            ->maxLength(255)
+                            ->maxLength(10)
+                            ->minLength(10)
                             ->unique(Student::class, 'record_book_number', ignoreRecord: true)
                             ->prefixIcon('heroicon-o-book-open')
                             ->hint('Має бути унікальним'),
@@ -60,12 +81,14 @@ class StudentResource extends Resource
                             ->label('Група')
                             ->relationship('group', 'name')
                             ->searchable()
+                            ->required()
                             ->preload()
                             ->placeholder('Оберіть групу')
                             ->prefixIcon('heroicon-o-users'),
 
                         DatePicker::make('enrollment_date')
                             ->label('Дата вступу')
+                            ->required()
                             ->displayFormat('d.m.Y')
                             ->prefixIcon('heroicon-o-calendar'),
                     ])
@@ -93,14 +116,18 @@ class StudentResource extends Resource
 
                         DatePicker::make('birthdate')
                             ->label('Дата народження')
+                            ->default(now())
                             ->displayFormat('d.m.Y')
                             ->prefixIcon('heroicon-o-cake'),
 
                         TextInput::make('phone_number')
                             ->label('Номер телефону')
                             ->tel()
-                            ->maxLength(255)
-                            ->prefixIcon('heroicon-o-phone'),
+                            ->maxLength(13)
+                            ->minLength(13)
+                            ->prefixIcon('heroicon-o-phone')
+                            ->hint('Формат: +38 (XXX) XXX-XX-XX'),
+
 
                         TextInput::make('address')
                             ->label('Адреса')
@@ -115,8 +142,25 @@ class StudentResource extends Resource
                         TextInput::make('guardian_phone')
                             ->label('Телефон опікуна')
                             ->tel()
-                            ->maxLength(255)
-                            ->prefixIcon('heroicon-o-phone'),
+                            ->maxLength(13)
+                            ->minLength(13)
+                            ->prefixIcon('heroicon-o-phone')
+                            ->hint('Формат: +38 (XXX) XXX-XX-XX'),
+                        DateTimePicker::make('created_at')
+                            ->label('Дата створення')
+                            ->prefixIcon('heroicon-o-calendar')
+                            ->displayFormat('d.m.Y H:i')
+                            ->disabled()
+                            ->default(now())
+                            ->hiddenOn('create'),
+
+                        DateTimePicker::make('updated_at')
+                            ->label('Дата оновлення')
+                            ->prefixIcon('heroicon-o-clock')
+                            ->displayFormat('d.m.Y H:i')
+                            ->disabled()
+                            ->default(now())
+                            ->hiddenOn('create'),
                     ])
                     ->columns(2),
             ]);
@@ -140,7 +184,7 @@ class StudentResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('record_book_number')
-                    ->label('Залікова книжка')
+                    ->label('Номер особової справи')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -156,11 +200,13 @@ class StudentResource extends Resource
                     ->label('Дата вступу')
                     ->date('d.m.Y')
                     ->sortable()
+                    ->searchable()
                     ->toggleable(),
 
                 TextColumn::make('failed_subjects')
                     ->label('Незараховані предмети')
                     ->sortable()
+                    ->searchable()
                     ->toggleable(),
 
                 IconColumn::make('is_scholarship_holder')
@@ -172,15 +218,55 @@ class StudentResource extends Resource
                     ->label('Дата народження')
                     ->date('d.m.Y')
                     ->sortable()
+                    ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('phone_number')
                     ->label('Телефон')
                     ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('user.email')
+                    ->label('Пошта')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('user.gender')
+                    ->label('Стать')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('birthplace')
+                    ->label('Місце народження')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('address')
+                    ->label('Адреса')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('guardian_name')
+                    ->label('Ім\'я опікуна')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('guardian_phone')
+                    ->label('Телефон опікуна')
+                    ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
                     ->label('Дата створення')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('updated_at')
+                    ->label('Дата оновлення')
                     ->dateTime('d.m.Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -207,18 +293,9 @@ class StudentResource extends Resource
                     ->icon('heroicon-o-trash'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->icon('heroicon-o-trash'),
-                ]),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->icon('heroicon-o-trash'),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            // Можна додати відношення до оцінок, відвідувань тощо
-        ];
     }
 
     public static function getPages(): array

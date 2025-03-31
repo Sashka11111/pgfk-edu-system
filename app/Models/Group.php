@@ -35,7 +35,11 @@ class Group extends Model
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
-
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'group_subject', 'group_id', 'subject_id')
+            ->withTimestamps();
+    }
     /**
      * Отримати студентів, які входять до групи.
      */

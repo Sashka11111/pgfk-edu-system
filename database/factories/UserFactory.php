@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 
 /**
@@ -31,6 +32,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'role' => fake()->randomElement([Role::STUDENT->value,Role::TEACHER->value, Role::ADMIN->value]),
+            'gender' => fake()->randomElement([Gender::MALE->value,Gender::FEMALE->value, Gender::OTHER->value]),
         ];
     }
 

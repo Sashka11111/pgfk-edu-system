@@ -35,14 +35,6 @@ class AppServiceProvider extends ServiceProvider
         Section::configureUsing(fn ($component) => $component->iconColor('primary'));
         Model::unguard();
         Model::shouldBeStrict();
-        Gate::before(function (?User $user, $ability, $arguments = []) {
-            if ($user->role = Role::ADMIN->value) {
-                return true;
-            }
-
-
-            return null;
-        });
     }
 
 }

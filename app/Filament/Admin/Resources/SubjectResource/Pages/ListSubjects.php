@@ -1,21 +1,20 @@
 <?php
 
-namespace Liamtseva\PGFKEduSystem\Filament\Admin\Resources\CourseResource\Pages;
+namespace Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SubjectResource\Pages;
 
-use Filament\Actions;
 use Filament\Resources\Components\Tab;
+use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SubjectResource;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\CourseResource;
-use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\CourseResource\Widgets\CourseStatsOverview;
-use Liamtseva\PGFKEduSystem\Models\Course;
+use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SubjectResource\Widgets\SubjectStatsOverview;
 
-class ListCourses extends ListRecords
+class ListSubjects extends ListRecords
 {
-    protected static string $resource = CourseResource::class;
+    protected static string $resource = SubjectResource::class;
     public function getTabs(): array
     {
         return [
-            Tab::make('Всі курси')
+            Tab::make('Всі предмети')
                 ->icon('heroicon-o-academic-cap'),
 
             Tab::make('Менше 50 годин')
@@ -40,7 +39,7 @@ class ListCourses extends ListRecords
     public function getHeaderWidgets(): array
     {
         return [
-            CourseStatsOverview::class,
+            SubjectStatsOverview::class,
         ];
     }
 }

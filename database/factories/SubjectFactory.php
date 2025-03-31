@@ -3,19 +3,19 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Liamtseva\PGFKEduSystem\Models\Course;
+use Liamtseva\PGFKEduSystem\Models\Subject;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Liamtseva\PGFKEduSystem\Models\Course>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Liamtseva\PGFKEduSystem\Models\Subject>
  */
-class CourseFactory extends Factory
+class SubjectFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = Course::class;
+    protected $model = Subject::class;
 
     public function definition(): array
     {

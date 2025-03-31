@@ -6,18 +6,17 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\UserResource\Pages\CreateUser;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\UserResource\Pages\EditUser;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\UserResource\Pages\ListUsers;
-use Liamtseva\PGFKEduSystem\Filament\Resources\UserResource\Pages;
 use Liamtseva\PGFKEduSystem\Models\User;
 
 class UserResource extends Resource
@@ -73,11 +72,12 @@ class UserResource extends Resource
                             ->required()
                             ->prefixIcon('heroicon-o-identification')
                             ->searchable(),
-                        DateTimePicker::make('email_verified_at')
-                            ->label('Дата підтвердження пошти')
-                            ->displayFormat('d.m.Y H:i')
-                            ->hiddenOn('create')
-                            ->disabled(),
+
+                        Select::make('gender')
+                            ->label('Стать')
+                            ->options(Gender::class)
+                            ->prefixIcon('bx-male-female'),
+
                         DateTimePicker::make('created_at')
                             ->label('Дата створення')
                             ->prefixIcon('heroicon-o-calendar')
@@ -93,6 +93,12 @@ class UserResource extends Resource
                             ->disabled()
                             ->default(now())
                             ->hiddenOn('create'),
+
+                        DateTimePicker::make('email_verified_at')
+                            ->label('Дата підтвердження пошти')
+                            ->displayFormat('d.m.Y H:i')
+                            ->hiddenOn('create')
+                            ->disabled(),
                     ])
                     ->columns(2),
 
@@ -120,6 +126,11 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
+                TextColumn::make('gender')
+                    ->label('Стать')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('email_verified_at')
                     ->label('Дата підтвердження Email')
                     ->dateTime('d-m-Y H:i')

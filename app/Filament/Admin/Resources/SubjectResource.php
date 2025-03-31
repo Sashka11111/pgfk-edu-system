@@ -6,8 +6,6 @@ use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,20 +13,20 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\CourseResource\Pages\CreateCourse;
-use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\CourseResource\Pages\EditCourse;
-use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\CourseResource\Pages\ListCourses;
-use Liamtseva\PGFKEduSystem\Models\Course;
+use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SubjectResource\Pages\CreateSubject;
+use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SubjectResource\Pages\EditSubject;
+use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SubjectResource\Pages\ListSubjects;
+use Liamtseva\PGFKEduSystem\Models\Subject;
 
-class CourseResource extends Resource
+class SubjectResource extends Resource
 {
-    protected static ?string $model = Course::class;
+    protected static ?string $model = Subject::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap'; // Іконка для курсів
 
-    protected static ?string $navigationLabel = 'Курси'; // Назва в навігації
-    protected static ?string $modelLabel = 'курс';
-    protected static ?string $pluralLabel = 'Курси'; // Назва у множині
+    protected static ?string $navigationLabel = 'Предмети'; // Назва в навігації
+    protected static ?string $modelLabel = 'предмет';
+    protected static ?string $pluralLabel = 'Предмети'; // Назва у множині
     protected static ?string $navigationGroup = 'Освітні налаштування';
     protected static ?int $navigationSort = 2;
 
@@ -37,14 +35,14 @@ class CourseResource extends Resource
         return $form
             ->schema([
                 Section::make('Основна інформація')
-                    ->description('Введіть основні дані про курс')
+                    ->description('Введіть основні дані про предмет')
                     ->icon('heroicon-o-academic-cap')
                     ->schema([
                         TextInput::make('name')
-                            ->label('Назва курсу')
+                            ->label('Назва предмета')
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('Введіть назву курсу')
+                            ->placeholder('Введіть назву предмета')
                             ->prefixIcon('heroicon-o-identification'),
 
                         TextInput::make('hours')
@@ -56,10 +54,10 @@ class CourseResource extends Resource
                             ->placeholder('Вкажіть кількість годин'),
 
                         RichEditor::make('description')
-                            ->label('Опис курсу')
+                            ->label('Опис предмета')
                             ->nullable()
                             ->disableToolbarButtons(['attachFiles'])
-                            ->placeholder('Опишіть курс детально')
+                            ->placeholder('Опишіть предмет детально')
                             ->columnSpanFull(),
 
                         DateTimePicker::make('created_at')
@@ -94,7 +92,7 @@ class CourseResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('name')
-                    ->label('Назва курсу')
+                    ->label('Назва предмета')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -161,9 +159,9 @@ class CourseResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListCourses::route('/'),
-            'create' => CreateCourse::route('/create'),
-            'edit' => EditCourse::route('/{record}/edit'),
+            'index' => ListSubjects::route('/'),
+            'create' => CreateSubject::route('/create'),
+            'edit' => EditSubject::route('/{record}/edit'),
         ];
     }
 }

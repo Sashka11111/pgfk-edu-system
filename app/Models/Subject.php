@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Liamtseva\PGFKEduSystem\Enums\Department;
 
-class Course extends Model
+class Subject extends Model
 {
     use HasFactory, HasUlids;
 
@@ -16,7 +16,7 @@ class Course extends Model
      *
      * @var string
      */
-    protected $table = 'courses';
+    protected $table = 'subjects';
 
     /**
      * Масово заповнювані атрибути.
@@ -29,6 +29,14 @@ class Course extends Model
         'description',
         'hours',
     ];
-
-
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class, 'subject_teacher', 'subject_id', 'teacher_id')
+            ->withTimestamps();
+    }
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_subject', 'subject_id', 'group_id')
+            ->withTimestamps();
+    }
 }

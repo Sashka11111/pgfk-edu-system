@@ -5,6 +5,7 @@ namespace Liamtseva\PGFKEduSystem\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Liamtseva\PGFKEduSystem\Enums\Position;
 
 class Worker extends Model
 {
@@ -25,5 +26,8 @@ class Worker extends Model
     {
         return $this->belongsTo(User::class);
     }
+    protected $casts = [
+        'position' => Position::class, // Enum приведення
+    ];
 }
 

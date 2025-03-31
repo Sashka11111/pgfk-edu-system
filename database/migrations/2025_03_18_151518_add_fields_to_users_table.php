@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 
 return new class extends Migration
@@ -16,6 +17,7 @@ return new class extends Migration
             $table->dropColumn('id');
             $table->ulid('id')->primary();
             $table->enumAlterColumn('role', 'role', Role::class, default: Role::STUDENT->value);
+            $table->enumAlterColumn('gender', 'gender', Gender::class, nullable: true);
         });
         Schema::table('sessions', function (Blueprint $table) {
             $table->dropIndex(['user_id']);

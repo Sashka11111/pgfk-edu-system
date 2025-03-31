@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('subjects', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('name');           // Назва курсу
-            $table->text('description')->nullable(); // Опис курсу
+            $table->string('name');           // Назва
+            $table->text('description')->nullable(); // Опис
             $table->integer('hours');         // Кількість годин
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('subjects');
     }
 };
