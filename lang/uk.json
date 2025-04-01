@@ -64,7 +64,7 @@
     "Edit :name": "Редагувати :name",
     "Email": "Електронна пошта",
     "email": "Поле :attribute повинне містити коректну електронну адресу.",
-    "Email Password Reset Link": "Посилання для скидання пароля електронної пошти",
+    "Email Password Reset Link": "Посилання для скидання пароля",
     "Enable": "Увімкнути",
     "Encrypted environment file already exists.": "Зашифрований файл середовища вже існує",
     "Encrypted environment file not found.": "Зашифрований файл середовища не знайдено",

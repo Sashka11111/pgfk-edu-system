@@ -36,24 +36,25 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+<div class="login-form">
+    <!-- Опис -->
+    <div class="login-form__description">
         {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
     </div>
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="login-form__status" :status="session('status')" />
 
-    <form wire:submit="sendPasswordResetLink">
+    <form wire:submit="sendPasswordResetLink" class="login-form__form">
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="login-form__field">
+            <x-input-label for="email" :value="__('Email')" class="login-form__label" />
+            <x-text-input wire:model="email" id="email" class="login-form__input" type="email" name="email" required autofocus />
+            <x-input-error :messages="$errors->get('email')" class="login-form__error" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
+        <div class="login-form__actions">
+            <x-primary-button class="login-form__button login-form__button--primary">
                 {{ __('Email Password Reset Link') }}
             </x-primary-button>
         </div>

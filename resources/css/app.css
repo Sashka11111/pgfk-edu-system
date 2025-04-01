@@ -1,3 +1,324 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Блок для всієї сторінки */
+.guest-layout {
+    font-family: 'Figtree', sans-serif; /* Шрифт Figtree */
+    color: #1f2937; /* Аналог text-gray-900 */
+    -webkit-font-smoothing: antialiased; /* Аналог antialiased */
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Елемент: контейнер для вмісту (форми) */
+.guest-layout__content {
+    width: 100%;
+    max-width: 448px; /* Аналог sm:max-w-md */
+    margin-top: 24px; /* Аналог mt-6 */
+    padding: 16px 24px; /* Аналог py-4 px-6 */
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Аналог shadow-md */
+    overflow: hidden; /* Аналог overflow-hidden */
+    border-radius: 0; /* За замовчуванням без закруглень */
+}
+
+/* Адаптивність: закруглені кути на середніх екранах */
+@media (min-width: 640px) {
+    .guest-layout__content {
+        border-radius: 8px; /* Аналог sm:rounded-lg */
+    }
+}
+.guest-layout__logo-link {
+    display: flex;
+    justify-content: center;
+}
+
+/* Елемент: зображення логотипу */
+.guest-layout__logo-image {
+    width: 80px; /* Аналог w-20 */
+    height: 80px; /* Аналог h-20 */
+    object-fit: contain; /* Зберігає пропорції зображення */
+    transition: transform 0.3s ease; /* Анімація при наведенні */
+}
+
+/* Ефект при наведенні на логотип */
+.guest-layout__logo-link:hover .guest-layout__logo-image {
+    transform: scale(1.1); /* Збільшення при наведенні */
+}
+/* Блок */
+.login-form {
+    margin: 0 auto;
+    padding: 38px;
+    border-radius: 16px;
+}
+.login-form__description {
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 16px;
+    color: #d1d5db; /* Світло-сірий текст */
+    line-height: 1.5;
+}
+.login-form__error {
+    min-height: 20px;
+    display: block;
+    color: #f87171;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Фон сторінки */
+body {
+    background: linear-gradient(135deg, #3b1a5a 0%, #1a1a2e 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Елементи */
+.login-form__status {
+    margin-bottom: 16px;
+    color: #fff;
+    font-size: 10px;
+}
+
+.login-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.login-form__label {
+    font-size: 14px;
+    color: #d1d5db; /* Світло-сірий текст */
+    font-weight: 500;
+}
+
+.login-form__input {
+    padding: 12px 9px ;
+    background: #ffffff; /* Темний фон для інпутів */
+    border: 1px solid #3a3a4e;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #1a1a2e;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.login-form__input:focus {
+    outline: none;
+    border-color: #6366f1; /* Синій контур при фокусі */
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.login-form__error {
+    color: #f87171; /* Червоний для помилок */
+    font-size: 12px;
+    margin-top: 4px;
+    min-height: 20px; /* Зарезервує місце під помилку */
+}
+
+.login-form__checkbox {
+    margin-top: 16px;
+}
+
+.login-form__checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-form__checkbox-input {
+    width: 16px;
+    height: 16px;
+    accent-color: #4c1997;
+}
+
+.login-form__checkbox-text {
+    font-size: 14px;
+    color: #d1d5db; /* Світло-сірий текст */
+}
+
+.login-form__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.login-form__link {
+    font-size: 14px;
+    color: #d1d5db;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.login-form__link:hover {
+    color: #fff;
+}
+
+/* Модифікатор для кнопки */
+.login-form__button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.login-form__button--primary {
+    background-color: #4c1997; /* Яскраво-синя кнопка */
+    color: #fff;
+}
+
+.login-form__button--primary:hover {
+    background-color: #4b0f7f; /* Темніший відтінок при наведенні */
+}
+.page--welcome::before {
+    position: absolute;
+    content: '';
+    background: url('../../public/images/wave-img.png') no-repeat;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    background-size: cover;
+    width: 100%;
+    height: 57px;
+    opacity: 0.2;
+    animation: waveone 10s linear infinite;
+    background-position: bottom center; /* Додано */
+}
+
+.page--welcome::after {
+    position: absolute;
+    content: '';
+    background: url('../../public/images/wave-img.png') no-repeat;
+    bottom: 0;
+    left: 0;
+    z-index: 998; /* Змінено, щоб було під нижчим шаром */
+    background-size: cover;
+    width: 100%;
+    height: 57px;
+    opacity: 0.3;
+    animation: wavetwo 10s linear infinite;
+    background-position: bottom center; /* Додано */
+}
+@keyframes waveone {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Рухається вліво */
+}
+
+@keyframes wavetwo {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); } /* Рухається вправо */
+}
+
+.welcome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.welcome__container {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.welcome__title {
+    font-size: 3.5rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.welcome__description {
+    font-size: 1.25rem;
+    color: #ffffff;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.welcome__button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: #ffffff;
+    color: #4c1997;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.welcome__button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .welcome__title {
+        font-size: 2.5rem;
+    }
+
+    .welcome__description {
+        font-size: 1rem;
+    }
+
+    .welcome__button {
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+.header {
+    background-color: #4a90e2;
+    padding: 20px;
+    text-align: center;
+}
+
+.header__title {
+    color: #fff;
+    font-size: 24px;
+}
+
+.profile {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile__container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.profile__section {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile__title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.profile__form {
+    display: flex;
+    flex-direction: column;
+}
+

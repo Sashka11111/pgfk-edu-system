@@ -21,42 +21,50 @@ class SubjectPolicy
     }
 
     /**
-     * Перевіряє, чи може користувач переглядати список предметів.
+     * Дозволяє перегляд списку предметів всім.
      */
     public function viewAny(User $user): bool
     {
-        return true; // Доступно всім авторизованим користувачам
+        return true;
     }
 
     /**
-     * Перевіряє, чи може користувач переглядати конкретний предмет.
+     * Дозволяє перегляд конкретного предмета всім.
      */
     public function view(User $user, Subject $subject): bool
     {
-        return true; // Доступно всім (можна змінити логіку)
+        return true;
     }
 
     /**
-     * Перевіряє, чи може користувач створювати предмети.
+     * Дозволяє створення предмета тільки вчителям та адміністраторам.
      */
     public function create(User $user): bool
     {
-        return in_array($user->role, [Role::TEACHER->value, Role::ADMIN->value]);
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
-     * Перевіряє, чи може користувач оновлювати предмет.
+     * Дозволяє оновлення предмета тільки адміністратору.
      */
     public function update(User $user, Subject $subject): bool
     {
-        return $user->id === $subject->teacher_id || $user->role === Role::ADMIN->value;
+        return $user->role === Role::ADMIN;
     }
 
     /**
-     * Перевіряє, чи може користувач видаляти предмет.
+     * Дозволяє видалення предмета тільки адміністратору.
      */
     public function delete(User $user, Subject $subject): bool
     {
-        return $user->id === $subject->teacher_id || $user->role === Role::ADMIN->value;
+        return $user->role === Role::ADMIN;
+    }
+
+    /**
+     * Забороняє не-адміністратору вибирати предмет.
+     */
+    public function select(User $user, Subject $subject): bool
+    {
+        return $user->role === Role::ADMIN;
     }
 }
