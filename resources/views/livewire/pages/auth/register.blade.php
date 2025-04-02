@@ -22,7 +22,12 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255',
+                function ($attribute, $value, $fail) {
+                    if (!str_ends_with($value, '@uzhnu.edu.ua') && !str_ends_with($value, '@student.uzhnu.edu.ua')) {
+                        $fail('Email-адреса повинна закінчуватися на @uzhnu.edu.ua або @student.uzhnu.edu.ua.');
+                    }
+                }, 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -31,7 +36,7 @@ new #[Layout('layouts.guest')] class extends Component
         event(new Registered($user = User::create($validated)));
         Auth::login($user);
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        redirect()->route('dashboard');
     }
 }; ?>
 

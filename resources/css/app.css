@@ -8,8 +8,8 @@
 
 /* Елемент: контейнер для вмісту (форми) */
 .guest-layout__content {
-    width: 100%;
-    max-width: 448px; /* Аналог sm:max-w-md */
+    width: 350px;
+    max-width: 350px; /* Аналог sm:max-w-md */
     margin-top: 24px; /* Аналог mt-6 */
     padding: 16px 24px; /* Аналог py-4 px-6 */
     background: rgba(255, 255, 255, 0.1);
@@ -44,7 +44,7 @@
 /* Блок */
 .login-form {
     margin: 0 auto;
-    padding: 38px;
+    padding: 10px;
     border-radius: 16px;
 }
 .login-form__description {
@@ -55,12 +55,15 @@
     line-height: 1.5;
 }
 .login-form__error {
-    min-height: 20px;
-    display: block;
+    padding: 0 12px; /* Зарезервоване місце для помилок */
     color: #f87171;
     font-size: 14px;
     margin-top: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word; /* Переносимо довгі слова */
 }
+
 
 /* Фон сторінки */
 body {
@@ -76,50 +79,45 @@ body {
 /* Елементи */
 .login-form__status {
     margin-bottom: 16px;
+    text-align: center;
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .login-form__form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 .login-form__field {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 .login-form__label {
     font-size: 14px;
     color: #d1d5db; /* Світло-сірий текст */
-    font-weight: 500;
 }
 
 .login-form__input {
-    padding: 12px 9px ;
-    background: #ffffff; /* Темний фон для інпутів */
-    border: 1px solid #3a3a4e;
-    border-radius: 8px;
+    padding: 12px;
+    background: transparent; /* Такий самий фон, як у форми */
+    border: none; /* Прибираємо всі межі */
+    border-bottom: 1px solid #ffffff; /* Залишаємо лише нижню межу */
+    border-radius: 0; /* Прибираємо закруглення */
     font-size: 16px;
-    color: #1a1a2e;
-    width: 100%;
+    color: #ffffff; /* Білий текст для контрасту з фоном */
+    width: 100%; /* Залишаємо ширину 100% */
+    box-sizing: border-box; /* Включаємо padding у ширину */
     transition: border-color 0.3s ease;
 }
 
 .login-form__input:focus {
     outline: none;
-    border-color: #6366f1; /* Синій контур при фокусі */
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-}
-
-.login-form__error {
-    color: #f87171; /* Червоний для помилок */
-    font-size: 12px;
-    margin-top: 4px;
-    min-height: 20px; /* Зарезервує місце під помилку */
+    border-bottom: 1px solid #6366f1; /* Синій колір нижньої межі при фокусі */
+    box-shadow: none; /* Прибираємо тінь при фокусі */
 }
 
 .login-form__checkbox {
@@ -193,7 +191,7 @@ body {
     width: 100%;
     height: 57px;
     opacity: 0.2;
-    animation: waveone 10s linear infinite;
+    animation: waveone 11s linear infinite;
     background-position: bottom center; /* Додано */
 }
 
@@ -208,7 +206,7 @@ body {
     width: 100%;
     height: 57px;
     opacity: 0.3;
-    animation: wavetwo 10s linear infinite;
+    animation: wavetwo 11s linear infinite;
     background-position: bottom center; /* Додано */
 }
 @keyframes waveone {
