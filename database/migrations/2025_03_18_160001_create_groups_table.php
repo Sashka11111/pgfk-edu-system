@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Liamtseva\PGFKEduSystem\Enums\Department;
+use Liamtseva\PGFKEduSystem\Enums\StudyForm;
 
 return new class extends Migration
 {
@@ -16,6 +17,7 @@ return new class extends Migration
             $table->ulid('id')->primary(); // Унікальний ідентифікатор ULID
             $table->string('name')->unique(); // Назва групи
             $table->integer('year_of_study'); // Рік навчання
+            $table->enumAlterColumn('study_form', 'study_form', StudyForm::class,default: StudyForm::FULL_TIME->value);
             $table->foreignUlid('specialty_id')->nullable()->constrained('specialties')->cascadeOnDelete(); // Спеціальність
             $table->foreignUlid('teacher_id')->nullable()->constrained('teachers')->cascadeOnDelete(); // Куратор (викладач)
             $table->timestamps(); // Дата створення та оновлення запису

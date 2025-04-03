@@ -39,4 +39,22 @@ class Subject extends Model
         return $this->belongsToMany(Group::class, 'group_subject', 'subject_id', 'group_id')
             ->withTimestamps();
     }
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_subject')
+            ->withTimestamps();
+    }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class, 'subject_id');
+    }
+
+    // Метод для отримання студентів, які не зарахували цей предмет
+    public function failedStudents()
+    {
+        return $this->students()->whereHas('grades', function ($query) {
+            $query->where('is_failed', true);
+        });
+    }
 }

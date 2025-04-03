@@ -8,10 +8,11 @@ use Filament\Support\Contracts\HasLabel;
 
 enum Qualification: string implements HasLabel, HasColor, HasIcon
 {
-    case MASTER = 'master';         // Магістр
-    case CANDIDATE = 'candidate';   // Кандидат наук
-    case DOCTOR = 'doctor';         // Доктор наук
-    case NONE = 'none';             // Без кваліфікації (для випадків, коли її ще немає)
+    case SPECIALIST = 'specialist';               // Спеціаліст
+    case SECOND_CATEGORY = 'second_category';     // Спеціаліст другої категорії
+    case FIRST_CATEGORY = 'first_category';       // Спеціаліст першої категорії
+    case HIGHEST_CATEGORY = 'highest_category';   // Спеціаліст вищої категорії
+    case NONE = 'none';                           // Без категорії
 
     /**
      * Повертає мітку для Filament
@@ -19,10 +20,11 @@ enum Qualification: string implements HasLabel, HasColor, HasIcon
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::MASTER => 'Магістр',
-            self::CANDIDATE => 'Кандидат наук',
-            self::DOCTOR => 'Доктор наук',
-            self::NONE => 'Без кваліфікації',
+            self::SPECIALIST => 'Спеціаліст',
+            self::SECOND_CATEGORY => 'Спеціаліст другої категорії',
+            self::FIRST_CATEGORY => 'Спеціаліст першої категорії',
+            self::HIGHEST_CATEGORY => 'Спеціаліст вищої категорії',
+            self::NONE => 'Без категорії',
         };
     }
 
@@ -32,22 +34,24 @@ enum Qualification: string implements HasLabel, HasColor, HasIcon
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::MASTER => 'info',      // Синій у Filament
-            self::CANDIDATE => 'success', // Зелений у Filament
-            self::DOCTOR => 'warning',    // Жовтий у Filament
-            self::NONE => 'gray',         // Сірий у Filament
+            self::SPECIALIST => 'primary',      // Блакитний у Filament
+            self::SECOND_CATEGORY => 'info',    // Синій у Filament
+            self::FIRST_CATEGORY => 'success',  // Зелений у Filament
+            self::HIGHEST_CATEGORY => 'warning', // Жовтий у Filament
+            self::NONE => 'gray',               // Сірий у Filament
         };
     }
 
     /**
-     * Повертає іконку для Filament (опціонально)
+     * Повертає іконку для Filament
      */
     public function getIcon(): ?string
     {
         return match ($this) {
-            self::MASTER => 'heroicon-o-academic-cap',
-            self::CANDIDATE => 'heroicon-o-book-open',
-            self::DOCTOR => 'heroicon-o-star',
+            self::SPECIALIST => 'heroicon-o-user',
+            self::SECOND_CATEGORY => 'heroicon-o-check-circle',
+            self::FIRST_CATEGORY => 'heroicon-o-shield-check',
+            self::HIGHEST_CATEGORY => 'heroicon-o-trophy',
             self::NONE => 'heroicon-o-minus-circle',
         };
     }

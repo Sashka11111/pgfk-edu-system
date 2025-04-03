@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('record_book_number')->unique(); // Номер залікової книжки
             $table->foreignUlid('group_id')->nullable()->constrained('groups')->cascadeOnDelete(); // Посилання на групу
             $table->date('enrollment_date')->nullable(); // Дата вступу
-            $table->integer('failed_subjects')->default(0); // Кількість незарахованих предметів
             $table->boolean('is_scholarship_holder')->default(false); // Чи отримує стипендію
             $table->string('birthplace')->nullable(); // Місце народження
             $table->date('birthdate')->nullable(); // Дата народження

@@ -18,7 +18,7 @@
 <div>
     <div class="guest-layout__content">
         <a href="{{ url('/') }}"  class="guest-layout__logo-link">
-            <img src="images/icon.png" alt="Logo" class="guest-layout__logo-image">
+            <img src="{{ asset('images/icon.png') }}" alt="Logo" class="guest-layout__logo-image">
         </a>
         {{ $slot }}
     </div>

@@ -73,7 +73,6 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
 }
 
 /* Елементи */
@@ -180,6 +179,9 @@ body {
 .login-form__button--primary:hover {
     background-color: #4b0f7f; /* Темніший відтінок при наведенні */
 }
+.page{
+    overflow: hidden;
+}
 .page--welcome::before {
     position: absolute;
     content: '';
@@ -189,10 +191,10 @@ body {
     z-index: 999;
     background-size: cover;
     width: 100%;
-    height: 57px;
+    height: 57px; /* Базова висота хвилі */
     opacity: 0.2;
     animation: waveone 11s linear infinite;
-    background-position: bottom center; /* Додано */
+    background-position: bottom center;
 }
 
 .page--welcome::after {
@@ -201,13 +203,13 @@ body {
     background: url('../../public/images/wave-img.png') no-repeat;
     bottom: 0;
     left: 0;
-    z-index: 998; /* Змінено, щоб було під нижчим шаром */
+    z-index: 998;
     background-size: cover;
     width: 100%;
-    height: 57px;
+    height: 57px; /* Базова висота хвилі */
     opacity: 0.3;
     animation: wavetwo 11s linear infinite;
-    background-position: bottom center; /* Додано */
+    background-position: bottom center;
 }
 @keyframes waveone {
     0% { transform: translateX(0); }
@@ -219,6 +221,21 @@ body {
     100% { transform: translateX(50%); } /* Рухається вправо */
 }
 
+@media (max-width: 768px) {
+    .page--welcome::before,
+    .page--welcome::after {
+        height: 187px; /* Ще менша висота */
+        animation-duration: 8s; /* Швидша анімація */
+    }
+}
+
+@media (max-width: 480px) {
+    .page--welcome::before,
+    .page--welcome::after {
+        height: 57px; /* Мінімальна висота */
+        animation-duration: 6s; /* Ще швидше */
+    }
+}
 .welcome {
     display: flex;
     align-items: center;
@@ -279,27 +296,10 @@ body {
         font-size: 1rem;
     }
 }
-
-.header {
-    background-color: #4a90e2;
-    padding: 20px;
-    text-align: center;
-}
-
-.header__title {
-    color: #fff;
-    font-size: 24px;
-}
-
 .profile {
     padding: 20px;
     display: flex;
     justify-content: center;
-}
-
-.profile__container {
-    width: 100%;
-    max-width: 800px;
 }
 
 .profile__section {
@@ -319,4 +319,189 @@ body {
     display: flex;
     flex-direction: column;
 }
+.header {
+    background-color: transparent;
+    padding: 5px 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0; /* Встановлює header на верхню частину */
+    width: 100%; /* Щоб header займав всю ширину сторінки */
+    z-index: 1000; /* Щоб header був поверх інших елементів */
+}
 
+.header__container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Відступ між елементами */
+    width: 100%;
+    padding: 0 20px; /* Відступи зліва і справа */
+}
+
+/* Логотип і назва в одному рядку */
+.header__logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Відступ між логотипом і назвою */
+}
+
+.header__logo-image {
+    height: 40px;
+    width: auto;
+}
+
+.header__title {
+    font-size: 20px;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Форма виходу залишається на місці */
+.header__logout-form {
+    display: flex;
+}
+
+.header__logout-button {
+    background-color: #4c1997;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.header__logout-button:hover {
+    background-color: #4b0f7f;
+    transform: scale(1.05);
+}
+
+/* Профіль */
+.profile {
+    padding: 40px 20px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.profile__container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.profile__section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile__section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.profile__section--danger {
+    border-left: 5px solid #f87171;
+}
+
+.profile__title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #4c1997;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.profile__title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: #4c1997;
+    border-radius: 2px;
+}
+
+.profile__form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Поля форми (адаптація до вашого стилю login-form) */
+.profile__form .login-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile__form .login-form__label {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.profile__form .login-form__input {
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #1f2937;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile__form .login-form__input:focus {
+    outline: none;
+    border-color: #4c1997;
+    box-shadow: 0 0 5px rgba(76, 25, 151, 0.3);
+}
+
+.profile__form .login-form__error {
+    color: #f87171;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.profile__form .login-form__button--primary {
+    background-color: #4c1997;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.profile__form .login-form__button--primary:hover {
+    background-color: #4b0f7f;
+    transform: translateY(-2px);
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .header__title {
+        font-size: 22px;
+    }
+
+    .header__logo-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    .profile {
+        padding: 20px 10px;
+    }
+
+    .profile__section {
+        padding: 15px;
+    }
+
+    .profile__title {
+        font-size: 18px;
+    }
+}

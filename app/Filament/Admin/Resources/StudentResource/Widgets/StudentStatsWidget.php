@@ -10,6 +10,8 @@ class StudentStatsWidget extends BaseWidget
 {
     protected function getStats(): array
     {
+        $averageAge = Student::selectRaw('AVG(EXTRACT(YEAR FROM AGE(NOW(), birthdate))) as avg_age')->first()->avg_age;
+        $averageAge = round($averageAge, 1);
         return [
             Stat::make('Всього студентів', Student::count())
                 ->description('Загальна кількість студентів')
@@ -19,9 +21,9 @@ class StudentStatsWidget extends BaseWidget
                 ->description('Студенти, які отримують стипендію')
                 ->icon('heroicon-o-currency-dollar')
                 ->color('success'),
-            Stat::make('Середня кількість незарахованих предметів', number_format(Student::avg('failed_subjects'), 2))
-                ->description('Середній показник по студентам')
-                ->icon('heroicon-o-x-circle')
+            Stat::make('Середній вік студентів', $averageAge . ' років')
+                ->description('На основі дати народження')
+                ->icon('heroicon-o-cake')
                 ->color('warning'),
         ];
     }

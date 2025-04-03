@@ -98,12 +98,14 @@ class StudentResource extends Resource
                     ->description('Академічні та контактні дані')
                     ->icon('heroicon-o-information-circle')
                     ->schema([
-                        TextInput::make('failed_subjects')
-                            ->label('Кількість незарахованих предметів')
-                            ->numeric()
-                            ->default(0)
-                            ->minValue(0)
-                            ->prefixIcon('heroicon-o-x-circle'),
+                        Select::make('subjects')
+                            ->label('Незараховані предмети')
+                            ->relationship('subjects', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->placeholder('Оберіть предмети')
+                            ->prefixIcon('heroicon-o-book-open'),
 
                         Toggle::make('is_scholarship_holder')
                             ->label('Отримує стипендію')
@@ -203,8 +205,12 @@ class StudentResource extends Resource
                     ->searchable()
                     ->toggleable(),
 
-                TextColumn::make('failed_subjects')
+                TextColumn::make('subjects.name')
                     ->label('Незараховані предмети')
+                    ->badge()
+                    ->limitList(2)
+                    ->tooltip(fn ($record) => $record->subjects->pluck('name')->join(', '))
+                    ->separator(', ')
                     ->sortable()
                     ->searchable()
                     ->toggleable(),

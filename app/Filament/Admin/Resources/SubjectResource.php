@@ -148,11 +148,6 @@ class SubjectResource extends Resource
                     ->icon('heroicon-o-pencil'),
                 Tables\Actions\DeleteAction::make()
                     ->icon('heroicon-o-trash'),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make()
-                    ->icon('heroicon-o-trash'),
-
             ]);
     }
 

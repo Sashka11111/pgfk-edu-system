@@ -27,7 +27,6 @@ class StudentFactory extends Factory
             'record_book_number' => strtoupper(Str::random(8)), // Генеруємо номер залікової книжки
             'group_id' => Group::factory(), // Прив'язуємо до випадкової групи
             'enrollment_date' => $this->faker->date(),
-            'failed_subjects' => $this->faker->numberBetween(0, 5), // Випадкова кількість незарахованих предметів
             'is_scholarship_holder' => $this->faker->boolean(30), // 30% студентів отримують стипендію
             'birthplace' => $this->faker->city(),
             'birthdate' => $this->faker->date(),

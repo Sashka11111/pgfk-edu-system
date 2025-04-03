@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Liamtseva\PGFKEduSystem\Enums\StudyForm;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\SpecialtyResource\Pages;
 use Liamtseva\PGFKEduSystem\Models\Specialty;
 use Liamtseva\PGFKEduSystem\Enums\Department;
@@ -50,7 +51,6 @@ class SpecialtyResource extends Resource
                             ->label('Код спеціальності')
                             ->required()
                             ->maxLength(3) // Обмежуємо максимальну довжину до 3 символів
-                            ->numeric() // Дозволяє вводити лише цифри
                             ->minLength(3) // Вимагає мінімум 3 символи
                             ->placeholder('Введіть 3-значний код')
                             ->unique(Specialty::class, 'code',ignoreRecord: true)
@@ -148,11 +148,6 @@ class SpecialtyResource extends Resource
                     ->icon('heroicon-o-pencil'),
                 Tables\Actions\DeleteAction::make()
                     ->icon('heroicon-o-trash'),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make()
-                        ->icon('heroicon-o-trash'),
-
             ]);
     }
 

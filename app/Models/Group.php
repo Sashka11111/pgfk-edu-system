@@ -5,6 +5,7 @@ namespace Liamtseva\PGFKEduSystem\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Liamtseva\PGFKEduSystem\Enums\StudyForm;
 
 class Group extends Model
 {
@@ -16,6 +17,7 @@ class Group extends Model
         'id',
         'name',
         'year_of_study',
+        'study_form',
         'specialty_id',
         'teacher_id',
     ];
@@ -47,4 +49,7 @@ class Group extends Model
     {
         return $this->hasMany(Student::class);
     }
+    protected $casts = [
+        'study_form' => StudyForm::class, // Enum приведення
+    ];
 }

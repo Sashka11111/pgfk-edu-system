@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Liamtseva\PGFKEduSystem\Enums\StudyForm;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\GroupResource\Pages\CreateGroup;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\GroupResource\Pages\EditGroup;
 use Liamtseva\PGFKEduSystem\Filament\Admin\Resources\GroupResource\Pages\ListGroups;
@@ -69,6 +70,13 @@ class GroupResource extends Resource
                             ->required()
                             ->placeholder('Оберіть спеціальність')
                             ->prefixIcon('heroicon-o-book-open'),
+
+                        Select::make('study_form')
+                            ->label('Форма навчання')
+                            ->required()
+                            ->options(StudyForm::class)
+                            ->searchable()
+                            ->prefixIcon('heroicon-o-briefcase'),
 
                         Select::make('teacher_id')
                             ->label('Куратор')
@@ -144,6 +152,12 @@ class GroupResource extends Resource
                     ->toggleable()
                     ->default('Не вказано'),
 
+                TextColumn::make('study_form')
+                    ->label('Форма навчання')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('teacher')
                     ->label('Куратор')
                     ->formatStateUsing(fn ($record) => $record->teacher?->user?->name ?? 'Не призначено')
@@ -195,11 +209,6 @@ class GroupResource extends Resource
                     ->icon('heroicon-o-pencil'),
                 Tables\Actions\DeleteAction::make()
                     ->icon('heroicon-o-trash'),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make()
-                    ->icon('heroicon-o-trash'),
-
             ]);
     }
 

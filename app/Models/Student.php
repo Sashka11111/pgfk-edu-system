@@ -17,7 +17,6 @@ class Student extends Model
         'record_book_number',
         'group_id',
         'enrollment_date',
-        'failed_subjects',
         'is_scholarship_holder',
         'birthplace',
         'birthdate',
@@ -41,6 +40,23 @@ class Student extends Model
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'student_subject')
+            ->withTimestamps();
+    }
+    public function grades()
+    {
+        return $this->hasMany(Grade::class, 'student_id');
+    }
+
+    // Метод для отримання незарахованих предметів
+    public function failedSubjects()
+    {
+        return $this->subjects()->whereHas('grades', function ($query) {
+            $query->where('is_failed', true);
+        });
     }
 }
 
