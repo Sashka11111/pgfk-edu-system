@@ -24,7 +24,10 @@ class TeacherFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), // Створюємо пов’язаного користувача
+            'user_id' => $this->faker->boolean(50) ? User::factory() : null, // 50% шансів, що user_id буде null
+            'last_name' => $this->faker->lastName(), // Прізвище
+            'first_name' => $this->faker->firstName(), // Ім’я
+            'middle_name' => $this->faker->lastName(), // По батькові
             'qualification' => $this->faker->randomElement(Qualification::cases()), // Випадкова кваліфікація
             'phone_number' => $this->faker->phoneNumber(), // Генеруємо номер телефону
             'experience_years' => $this->faker->numberBetween(1, 40), // Випадковий досвід у роках

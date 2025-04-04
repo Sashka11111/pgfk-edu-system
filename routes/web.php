@@ -4,6 +4,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Liamtseva\PGFKEduSystem\Http\Controllers\DashboardController;
+use Liamtseva\PGFKEduSystem\Http\Controllers\StudentController;
 
 Route::view('/', 'welcome');
 
@@ -14,6 +15,8 @@ Route::get('dashboard', [DashboardController::class, 'index'])
 Route::view('profile', 'profile')
     ->middleware(['auth', 'verified'])
     ->name('profile');
+
+Route::get('/student/{id}', [StudentController::class, 'show'])->name('student.show');
 
 Route::get('/email/verify', function () {
     return view('auth.verify-email');

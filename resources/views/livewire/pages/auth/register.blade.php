@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Validation\Rules\Enum;
+use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -8,12 +10,12 @@ use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
+new #[Layout('layouts.guest')] class extends Component {
     public string $name = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
+    public Gender|string $gender = '';
 
     /**
      * Handle an incoming registration request.
@@ -22,12 +24,16 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255',
+            'email' => [
+                'required', 'string', 'lowercase', 'email', 'max:255',
                 function ($attribute, $value, $fail) {
-                    if (!str_ends_with($value, '@uzhnu.edu.ua') && !str_ends_with($value, '@student.uzhnu.edu.ua')) {
+                    if (!str_ends_with($value, '@uzhnu.edu.ua') && !str_ends_with($value,
+                            '@student.uzhnu.edu.ua')) {
                         $fail('Email-адреса повинна закінчуватися на @uzhnu.edu.ua або @student.uzhnu.edu.ua.');
                     }
-                }, 'unique:' . User::class],
+                }, 'unique:'.User::class
+            ],
+            'gender' => ['required', new Enum(Gender::class)],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -44,31 +50,51 @@ new #[Layout('layouts.guest')] class extends Component
     <form wire:submit="register" class="login-form__form">
         <!-- Name -->
         <div class="login-form__field">
-            <x-input-label for="name" :value="__('Name')" class="login-form__label" />
-            <x-text-input wire:model="name" id="name" class="login-form__input" type="text" name="name" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="login-form__error" />
+            <x-input-label for="name" :value="__('Name')" class="login-form__label"/>
+            <x-text-input wire:model="name" id="name" class="login-form__input" type="text"
+                          name="name" required autofocus autocomplete="name"/>
+            <x-input-error :messages="$errors->get('name')" class="login-form__error"/>
         </div>
 
         <!-- Email Address -->
         <div class="login-form__field">
-            <x-input-label for="email" :value="__('Email')" class="login-form__label" />
-            <x-text-input wire:model="email" id="email" class="login-form__input" type="email" name="email" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="login-form__error" />
+            <x-input-label for="email" :value="__('Email')" class="login-form__label"/>
+            <x-text-input wire:model="email" id="email" class="login-form__input" type="email"
+                          name="email" required autocomplete="username"/>
+            <x-input-error :messages="$errors->get('email')" class="login-form__error"/>
         </div>
 
         <!-- Password -->
         <div class="login-form__field">
-            <x-input-label for="password" :value="__('Password')" class="login-form__label" />
-            <x-text-input wire:model="password" id="password" class="login-form__input" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="login-form__error" />
+            <x-input-label for="password" :value="__('Password')" class="login-form__label"/>
+            <x-text-input wire:model="password" id="password" class="login-form__input"
+                          type="password" name="password" required autocomplete="new-password"/>
+            <x-input-error :messages="$errors->get('password')" class="login-form__error"/>
         </div>
 
         <!-- Confirm Password -->
         <div class="login-form__field">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" class="login-form__label" />
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="login-form__input" type="password" name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="login-form__error" />
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')"
+                           class="login-form__label"/>
+            <x-text-input wire:model="password_confirmation" id="password_confirmation"
+                          class="login-form__input" type="password" name="password_confirmation"
+                          required autocomplete="new-password"/>
+            <x-input-error :messages="$errors->get('password_confirmation')"
+                           class="login-form__error"/>
         </div>
+        <!-- Gender -->
+        <div class="login-form__field">
+            <select wire:model="gender" id="gender" name="gender" class="login-form__select" required>
+                <option value="">{{ __('Оберіть стать') }}</option>
+                @foreach (Gender::cases() as $genderOption)
+                    <option value="{{ $genderOption->value }}">
+                        {{ $genderOption->getLabel() }}
+                    </option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('gender')" class="login-form__error" />
+        </div>
+
 
         <div class="login-form__actions">
             <a class="login-form__link" href="{{ route('login') }}" wire:navigate>

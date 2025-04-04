@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->ulid('id')->primary(); // Унікальний ідентифікатор ULID
-            $table->foreignUlid('user_id')->constrained('users')->cascadeOnDelete(); // Посилання на користувача
+            $table->foreignUlid('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('last_name'); // Прізвище
+            $table->string('first_name'); // Ім’я
+            $table->string('middle_name')->nullable(); // По батькові
             $table->string('record_book_number')->unique(); // Номер залікової книжки
             $table->foreignUlid('group_id')->nullable()->constrained('groups')->cascadeOnDelete(); // Посилання на групу
             $table->date('enrollment_date')->nullable(); // Дата вступу

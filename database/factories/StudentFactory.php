@@ -23,8 +23,11 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), // Створюємо користувача
+            'user_id' => $this->faker->boolean(50) ? User::factory() : null, // 50% шансів, що user_id буде null
             'record_book_number' => strtoupper(Str::random(8)), // Генеруємо номер залікової книжки
+            'last_name' => $this->faker->lastName(), // Прізвище
+            'first_name' => $this->faker->firstName(), // Ім’я
+            'middle_name' => $this->faker->lastName(), // По батькові
             'group_id' => Group::factory(), // Прив'язуємо до випадкової групи
             'enrollment_date' => $this->faker->date(),
             'is_scholarship_holder' => $this->faker->boolean(30), // 30% студентів отримують стипендію

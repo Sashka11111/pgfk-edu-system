@@ -5,7 +5,7 @@ namespace Liamtseva\PGFKEduSystem\Http\Controllers;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Liamtseva\PGFKEduSystem\Filament\Admin\Pages\Dashboard;
+use Liamtseva\PGFKEduSystem\Filament\Home\Pages\Dashboard;
 
 class DashboardController extends Controller
 {

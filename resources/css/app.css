@@ -224,7 +224,7 @@ body {
 @media (max-width: 768px) {
     .page--welcome::before,
     .page--welcome::after {
-        height: 187px; /* Ще менша висота */
+        height: 57px; /* Ще менша висота */
         animation-duration: 8s; /* Швидша анімація */
     }
 }
@@ -232,7 +232,7 @@ body {
 @media (max-width: 480px) {
     .page--welcome::before,
     .page--welcome::after {
-        height: 57px; /* Мінімальна висота */
+        height: 36px; /* Мінімальна висота */
         animation-duration: 6s; /* Ще швидше */
     }
 }
@@ -321,7 +321,7 @@ body {
 }
 .header {
     background-color: transparent;
-    padding: 5px 10px;
+    padding: 0 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: absolute;
@@ -504,4 +504,25 @@ body {
     .profile__title {
         font-size: 18px;
     }
+}
+/* Селект для вибору статі */
+.login-form__field select {
+    padding: 12px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #ffffff;
+    border-radius: 0;
+    font-size: 16px;
+    color: #ffffff;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+
+/* Селект: опції */
+.login-form__field option {
+    background-color: #1f2937;
+    color: #ffffff;
+    padding: 10px;
 }

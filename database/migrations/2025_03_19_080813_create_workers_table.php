@@ -14,7 +14,10 @@ return new class extends Migration
     {
         Schema::create('workers', function (Blueprint $table) {
             $table->ulid('id')->primary(); // Унікальний ідентифікатор ULID
-            $table->foreignUlid('user_id')->constrained('users')->cascadeOnDelete(); // Посилання на users
+            $table->string('last_name'); // Прізвище
+            $table->string('first_name'); // Ім’я
+            $table->string('middle_name')->nullable(); // По батькові
+            $table->foreignUlid('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->enumAlterColumn('position', 'position', Position::class);
             $table->string('phone_number')->nullable(); // Номер телефону
             $table->timestamps();

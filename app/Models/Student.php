@@ -5,6 +5,7 @@ namespace Liamtseva\PGFKEduSystem\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Liamtseva\PGFKEduSystem\Enums\Role;
 
 class Student extends Model
 {
@@ -14,6 +15,9 @@ class Student extends Model
 
     protected $fillable = [
         'user_id',
+        'last_name',
+        'first_name',
+        'middle_name',
         'record_book_number',
         'group_id',
         'enrollment_date',
@@ -33,7 +37,10 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public function isStudent(): bool
+    {
+        return $this->role->value === Role::STUDENT->value;
+    }
     /**
      * Отримати групу, до якої належить студент.
      */
@@ -45,18 +52,6 @@ class Student extends Model
     {
         return $this->belongsToMany(Subject::class, 'student_subject')
             ->withTimestamps();
-    }
-    public function grades()
-    {
-        return $this->hasMany(Grade::class, 'student_id');
-    }
-
-    // Метод для отримання незарахованих предметів
-    public function failedSubjects()
-    {
-        return $this->subjects()->whereHas('grades', function ($query) {
-            $query->where('is_failed', true);
-        });
     }
 }
 
