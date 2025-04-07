@@ -2,8 +2,6 @@
 
 namespace Liamtseva\PGFKEduSystem\Models;
 
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,7 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 
-class User extends Authenticatable implements FilamentUser,MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasUlids;
     protected $table = 'users';
@@ -43,21 +41,6 @@ class User extends Authenticatable implements FilamentUser,MustVerifyEmail
     {
         return auth()->check();  // Перевіряє, чи користувач аутентифікований
     }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->isAdmin() || $this->isTeacher();
-    }
-    public function isAdmin(): bool
-    {
-        return $this->role->value === Role::ADMIN->value;
-    }
-
-    public function isTeacher(): bool
-    {
-        return $this->role->value === Role::TEACHER->value;
-    }
-
 
 
     /**

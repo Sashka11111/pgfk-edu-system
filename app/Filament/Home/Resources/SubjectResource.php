@@ -106,7 +106,7 @@ class SubjectResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('hours')
-                    ->label('Годин')
+                    ->label('Години')
                     ->alignCenter()
                     ->icon('heroicon-o-clock')
                     ->searchable()

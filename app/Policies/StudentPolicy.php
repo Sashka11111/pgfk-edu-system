@@ -26,8 +26,7 @@ class StudentPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Дозволяємо переглядати список студентів адміністраторам і викладачам
-        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+        return true;
     }
 
     /**
@@ -35,13 +34,7 @@ class StudentPolicy
      */
     public function view(User $user, Student $student): bool
     {
-        // Дозволяємо переглядати студента:
-        // - Адміністраторам
-        // - Викладачам
-        // - Самому студенту (якщо у студента є зв’язок із User)
-        return $user->role === Role::ADMIN ||
-            $user->role === Role::TEACHER ||
-            ($user->role === Role::STUDENT && $user->id === $student->user_id);
+        return true;
     }
 
     /**
@@ -58,11 +51,7 @@ class StudentPolicy
      */
     public function update(User $user, Student $student): bool
     {
-        // Дозволяємо редагувати:
-        // - Адміністраторам
-        // - Самому студенту (якщо є зв’язок із User)
-        return $user->role === Role::ADMIN ||
-            ($user->role === Role::STUDENT && $user->id === $student->user_id);
+        return $user->role === Role::ADMIN;
     }
 
     /**

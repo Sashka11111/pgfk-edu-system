@@ -17,6 +17,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Liamtseva\PGFKEduSystem\Enums\Gender;
+use Liamtseva\PGFKEduSystem\Enums\Role;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\CreateStudent;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\EditStudent;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\ListStudents;
@@ -171,8 +172,14 @@ class StudentResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $query = Student::query()->with(['user', 'group']);
+
+        // Перевірка ролі користувача
+        if (auth()->user() && auth()->user()->role === Role::STUDENT) {
+            $query->where('user_id', auth()->id());
+        }
         return $table
-            ->query(Student::query()->with(['user', 'group']))
+            ->query($query)
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')

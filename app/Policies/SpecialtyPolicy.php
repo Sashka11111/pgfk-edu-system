@@ -26,8 +26,7 @@ class SpecialtyPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Дозволяємо переглядати список спеціальностей адміністраторам і викладачам
-        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+        return true;
     }
 
     /**
@@ -35,8 +34,7 @@ class SpecialtyPolicy
      */
     public function view(User $user, Specialty $specialty): bool
     {
-        // Дозволяємо переглядати спеціальність адміністраторам і викладачам
-        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+        return true;
     }
 
     /**

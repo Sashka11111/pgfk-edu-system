@@ -2,6 +2,7 @@
 
 namespace Liamtseva\PGFKEduSystem\Providers;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Section;

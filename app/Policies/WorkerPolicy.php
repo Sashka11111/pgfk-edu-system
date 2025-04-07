@@ -38,8 +38,7 @@ class WorkerPolicy
         // Дозволяємо переглядати працівника:
         // - Адміністраторам
         // - Самому працівнику (якщо є зв’язок із User)
-        return $user->role === Role::ADMIN ||
-            ($user->role === Role::TEACHER && $user->id === $worker->user_id);
+        return $user->role === Role::ADMIN || $user->role === Role::TEACHER;
     }
 
     /**

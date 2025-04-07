@@ -14,12 +14,6 @@ class DashboardController extends Controller
         // Перевіряємо, чи користувач аутентифікований
         if (!Auth::check()) {
             return redirect()->route('login');
-        }
-
-        $userRole = Auth::user()->role->value;
-        // Перевіряємо роль студента
-        if ($userRole === Role::STUDENT->value) {
-            return redirect()->route('profile');
         }else{
             return redirect(Dashboard::getUrl());
         }

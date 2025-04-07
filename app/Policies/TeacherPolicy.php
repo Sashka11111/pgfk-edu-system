@@ -26,8 +26,7 @@ class TeacherPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Дозволяємо переглядати список викладачів адміністраторам і викладачам
-        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+        return true;
     }
 
     /**
@@ -35,13 +34,7 @@ class TeacherPolicy
      */
     public function view(User $user, Teacher $teacher): bool
     {
-        // Дозволяємо переглядати викладача:
-        // - Адміністраторам
-        // - Викладачам (власний профіль або всі профілі)
-        // - Студентам (можуть бачити профілі викладачів)
-        return $user->role === Role::ADMIN ||
-            $user->role === Role::TEACHER ||
-            $user->role === Role::STUDENT;
+        return true;
     }
 
     /**

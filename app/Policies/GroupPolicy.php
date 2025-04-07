@@ -26,8 +26,7 @@ class GroupPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Дозволяємо переглядати список груп адміністраторам і викладачам
-        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+        return true;
     }
 
     /**
@@ -35,8 +34,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $group): bool
     {
-        // Дозволяємо переглядати групу адміністраторам і викладачам
-        return in_array($user->role, [Role::ADMIN, Role::TEACHER]);
+        return true;
     }
 
     /**
