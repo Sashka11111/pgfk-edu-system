@@ -42,8 +42,7 @@ class StudentPolicy
      */
     public function create(User $user): bool
     {
-        // Тільки адміністратори можуть створювати студентів
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -51,7 +50,7 @@ class StudentPolicy
      */
     public function update(User $user, Student $student): bool
     {
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -59,8 +58,7 @@ class StudentPolicy
      */
     public function delete(User $user, Student $student): bool
     {
-        // Тільки адміністратори можуть видаляти студентів
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -68,8 +66,7 @@ class StudentPolicy
      */
     public function restore(User $user, Student $student): bool
     {
-        // Тільки адміністратори можуть відновлювати студентів
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -77,7 +74,6 @@ class StudentPolicy
      */
     public function forceDelete(User $user, Student $student): bool
     {
-        // Тільки адміністратори можуть остаточно видаляти студентів
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 }

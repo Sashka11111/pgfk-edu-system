@@ -330,26 +330,6 @@ body {
     z-index: 1000; /* Щоб header був поверх інших елементів */
 }
 
-.header__container {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* Відступ між елементами */
-    width: 100%;
-    padding: 0 20px; /* Відступи зліва і справа */
-}
-
-/* Логотип і назва в одному рядку */
-.header__logo-link {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Відступ між логотипом і назвою */
-}
-
-.header__logo-image {
-    height: 40px;
-    width: auto;
-}
-
 .header__title {
     font-size: 20px;
     color: #ffffff;

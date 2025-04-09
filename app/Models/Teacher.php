@@ -19,6 +19,7 @@ class Teacher extends Model
         'first_name',
         'middle_name',
         'user_id',
+        'email',
         'qualification',
         'phone_number',
         'experience_years',

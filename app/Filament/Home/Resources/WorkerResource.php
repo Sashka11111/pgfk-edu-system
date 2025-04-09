@@ -14,6 +14,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Liamtseva\PGFKEduSystem\Enums\Position;
+use Liamtseva\PGFKEduSystem\Enums\Role;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\WorkerResource\Pages\CreateWorker;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\WorkerResource\Pages\EditWorker;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\WorkerResource\Pages\ListWorkers;
@@ -32,6 +33,7 @@ class WorkerResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $isWorker = auth()->user() && auth()->user()->role === Role::ADMIN;
         return $form
             ->schema([
                 Section::make('Особисті дані')
@@ -61,8 +63,26 @@ class WorkerResource extends Resource
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
+                            ->live() // Робимо поле реактивним
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                // Оновлюємо поле email на основі вибраного user_id
+                                if ($state) {
+                                    $user = User::find($state);
+                                    $set('email', $user?->email);
+                                } else {
+                                    $set('email', null); // Очищаємо, якщо користувач не вибраний
+                                }
+                            })
                             ->placeholder('Оберіть користувача')
-                            ->prefixIcon('heroicon-o-user-circle'),
+                            ->prefixIcon('heroicon-o-user-circle')
+                            ->disabled($isWorker),
+
+                        TextInput::make('email')
+                            ->label('Пошта')
+                            ->email()
+                            ->required()
+                            ->maxLength(255)
+                            ->prefixIcon('heroicon-o-envelope'),
 
                         Select::make('position')
                             ->label('Посада')
@@ -137,7 +157,7 @@ class WorkerResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('user.email')
+                TextColumn::make('email')
                     ->label('Пошта')
                     ->sortable()
                     ->searchable()

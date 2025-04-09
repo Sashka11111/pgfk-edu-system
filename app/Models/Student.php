@@ -20,6 +20,7 @@ class Student extends Model
         'middle_name',
         'record_book_number',
         'group_id',
+        'email',
         'enrollment_date',
         'is_scholarship_holder',
         'birthplace',

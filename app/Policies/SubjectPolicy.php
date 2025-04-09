@@ -49,7 +49,7 @@ class SubjectPolicy
      */
     public function update(User $user, Subject $subject): bool
     {
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -57,14 +57,7 @@ class SubjectPolicy
      */
     public function delete(User $user, Subject $subject): bool
     {
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
-    /**
-     * Забороняє не-адміністратору вибирати предмет.
-     */
-    public function select(User $user, Subject $subject): bool
-    {
-        return $user->role === Role::ADMIN;
-    }
 }

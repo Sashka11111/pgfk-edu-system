@@ -42,8 +42,7 @@ class GroupPolicy
      */
     public function create(User $user): bool
     {
-        // Тільки адміністратори можуть створювати групи
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -51,8 +50,7 @@ class GroupPolicy
      */
     public function update(User $user, Group $group): bool
     {
-        // Тільки адміністратори можуть редагувати групи
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -60,8 +58,7 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group): bool
     {
-        // Тільки адміністратори можуть видаляти групи
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -69,8 +66,7 @@ class GroupPolicy
      */
     public function restore(User $user, Group $group): bool
     {
-        // Тільки адміністратори можуть відновлювати групи
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 
     /**
@@ -78,7 +74,6 @@ class GroupPolicy
      */
     public function forceDelete(User $user, Group $group): bool
     {
-        // Тільки адміністратори можуть остаточно видаляти групи
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::TEACHER || $user->role === Role::ADMIN;
     }
 }

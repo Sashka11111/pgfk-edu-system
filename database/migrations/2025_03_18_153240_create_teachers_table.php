@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('first_name'); // Ім’я
             $table->string('middle_name')->nullable(); // По батькові
             $table->foreignUlid('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('email');
             $table->enumAlterColumn('qualification', 'qualification', Qualification::class);
             $table->string('phone_number')->nullable(); // Номер телефону
             $table->integer('experience_years')->default(0); // Досвід роботи (у роках)

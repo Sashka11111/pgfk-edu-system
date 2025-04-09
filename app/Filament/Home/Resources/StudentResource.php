@@ -15,12 +15,11 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Liamtseva\PGFKEduSystem\Enums\Gender;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\CreateStudent;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\EditStudent;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\ListStudents;
+use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\ViewStudent;
 use Liamtseva\PGFKEduSystem\Models\Student;
 use Liamtseva\PGFKEduSystem\Models\Group;
 use Liamtseva\PGFKEduSystem\Models\User;
@@ -38,6 +37,8 @@ class StudentResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $isStudent = auth()->user() && auth()->user()->role === Role::STUDENT;
+
         return $form
             ->schema([
                 Section::make('Особисті дані')
@@ -48,27 +49,48 @@ class StudentResource extends Resource
                             ->label('Прізвище')
                             ->required()
                             ->minLength(2)
-                            ->maxLength(50),
+                            ->maxLength(50)
+                            ->disabled($isStudent),
 
                         TextInput::make('first_name')
                             ->label("Ім'я")
                             ->required()
                             ->minLength(2)
-                            ->maxLength(50),
+                            ->maxLength(50)
+                            ->disabled($isStudent),
 
                         TextInput::make('middle_name')
                             ->label('По батькові')
                             ->nullable()
                             ->minLength(2)
-                            ->maxLength(50),
+                            ->maxLength(50)
+                            ->disabled($isStudent),
 
                         Select::make('user_id')
                             ->label('Користувач')
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
+                            ->live() // Робимо поле реактивним
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                // Оновлюємо поле email на основі вибраного user_id
+                                if ($state) {
+                                    $user = User::find($state);
+                                    $set('email', $user?->email);
+                                } else {
+                                    $set('email', null); // Очищаємо, якщо користувач не вибраний
+                                }
+                            })
                             ->placeholder('Оберіть користувача')
-                            ->prefixIcon('heroicon-o-user-circle'),
+                            ->prefixIcon('heroicon-o-user-circle')
+                            ->disabled($isStudent),
+
+                        TextInput::make('email')
+                            ->label('Пошта')
+                            ->email()
+                            ->required()
+                            ->maxLength(255)
+                            ->prefixIcon('heroicon-o-envelope'),
 
                         TextInput::make('record_book_number')
                             ->label('Номер залікової книжки')
@@ -77,7 +99,7 @@ class StudentResource extends Resource
                             ->minLength(10)
                             ->unique(Student::class, 'record_book_number', ignoreRecord: true)
                             ->prefixIcon('heroicon-o-book-open')
-                            ->hint('Має бути унікальним'),
+                            ->disabled($isStudent),
 
                         Select::make('group_id')
                             ->label('Група')
@@ -86,13 +108,15 @@ class StudentResource extends Resource
                             ->required()
                             ->preload()
                             ->placeholder('Оберіть групу')
-                            ->prefixIcon('heroicon-o-users'),
+                            ->prefixIcon('heroicon-o-users')
+                            ->disabled($isStudent),
 
                         DatePicker::make('enrollment_date')
                             ->label('Дата вступу')
                             ->required()
                             ->displayFormat('d.m.Y')
-                            ->prefixIcon('heroicon-o-calendar'),
+                            ->prefixIcon('heroicon-o-calendar')
+                            ->disabled($isStudent),
                     ])
                     ->columns(2),
 
@@ -107,22 +131,26 @@ class StudentResource extends Resource
                             ->preload()
                             ->searchable()
                             ->placeholder('Оберіть предмети')
-                            ->prefixIcon('heroicon-o-book-open'),
+                            ->prefixIcon('heroicon-o-book-open')
+                            ->disabled($isStudent),
 
                         Toggle::make('is_scholarship_holder')
                             ->label('Отримує стипендію')
-                            ->default(false),
+                            ->default(false)
+                            ->disabled($isStudent),
 
                         TextInput::make('birthplace')
                             ->label('Місце народження')
                             ->maxLength(255)
-                            ->prefixIcon('heroicon-o-map-pin'),
+                            ->prefixIcon('heroicon-o-map-pin')
+                            ->disabled($isStudent),
 
                         DatePicker::make('birthdate')
                             ->label('Дата народження')
                             ->default(now())
                             ->displayFormat('d.m.Y')
-                            ->prefixIcon('heroicon-o-cake'),
+                            ->prefixIcon('heroicon-o-cake')
+                            ->disabled($isStudent),
 
                         TextInput::make('phone_number')
                             ->label('Номер телефону')
@@ -130,18 +158,20 @@ class StudentResource extends Resource
                             ->maxLength(13)
                             ->minLength(13)
                             ->prefixIcon('heroicon-o-phone')
-                            ->hint('Формат: +38 (XXX) XXX-XX-XX'),
-
+                            ->hint('Формат: +38 (XXX) XXX-XX-XX')
+                            ->disabled($isStudent),
 
                         TextInput::make('address')
                             ->label('Адреса')
                             ->maxLength(255)
-                            ->prefixIcon('heroicon-o-home'),
+                            ->prefixIcon('heroicon-o-home')
+                            ->disabled($isStudent),
 
                         TextInput::make('guardian_name')
                             ->label('Ім\'я опікуна')
                             ->maxLength(255)
-                            ->prefixIcon('heroicon-o-user-group'),
+                            ->prefixIcon('heroicon-o-user-group')
+                            ->disabled($isStudent),
 
                         TextInput::make('guardian_phone')
                             ->label('Телефон опікуна')
@@ -149,7 +179,9 @@ class StudentResource extends Resource
                             ->maxLength(13)
                             ->minLength(13)
                             ->prefixIcon('heroicon-o-phone')
-                            ->hint('Формат: +38 (XXX) XXX-XX-XX'),
+                            ->hint('Формат: +38 (XXX) XXX-XX-XX')
+                            ->disabled($isStudent),
+
                         DateTimePicker::make('created_at')
                             ->label('Дата створення')
                             ->prefixIcon('heroicon-o-calendar')
@@ -172,12 +204,13 @@ class StudentResource extends Resource
 
     public static function table(Table $table): Table
     {
+        // Таблиця доступна лише для не-студентів
+        if (auth()->user() && auth()->user()->role === Role::STUDENT) {
+            abort(403, 'Доступ до списку студентів заборонено.');
+        }
+
         $query = Student::query()->with(['user', 'group']);
 
-        // Перевірка ролі користувача
-        if (auth()->user() && auth()->user()->role === Role::STUDENT) {
-            $query->where('user_id', auth()->id());
-        }
         return $table
             ->query($query)
             ->columns([
@@ -244,7 +277,7 @@ class StudentResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('user.email')
+                TextColumn::make('email')
                     ->label('Пошта')
                     ->sortable()
                     ->searchable()
@@ -314,13 +347,43 @@ class StudentResource extends Resource
                     ->icon('heroicon-o-trash'),
             ]);
     }
-
     public static function getPages(): array
     {
+        // Для студентів доступна лише сторінка перегляду їхнього запису
+        if (auth()->user() && auth()->user()->role === Role::STUDENT) {
+            $student = Student::where('user_id', auth()->id())->first();
+            if ($student) {
+                return [
+                    'view' => ViewStudent::route('/{record}'),
+                ];
+            }
+            return [];
+        }
+
+        // Для інших ролей доступні всі сторінки
         return [
             'index' => ListStudents::route('/'),
             'create' => CreateStudent::route('/create'),
             'edit' => EditStudent::route('/{record}/edit'),
+            'view' => ViewStudent::route('/{record}'),
         ];
+    }
+
+    /**
+     * Налаштування URL для пункту меню "Студенти"
+     */
+    public static function getNavigationUrl(): string
+    {
+        if (auth()->user() && auth()->user()->role === Role::STUDENT) {
+            $student = Student::where('user_id', auth()->id())->first();
+            if ($student) {
+                return static::getUrl('view', ['record' => $student->id]);
+            }
+            // Якщо студента не знайдено, можна перенаправити куди завгодно
+            return route('dashboard'); // або інший маршрут
+        }
+
+        // Для інших ролей повертаємо стандартний URL списку студентів
+        return static::getUrl('index');
     }
 }

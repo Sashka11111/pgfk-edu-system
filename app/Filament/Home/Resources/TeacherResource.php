@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Liamtseva\PGFKEduSystem\Enums\Department;
 use Liamtseva\PGFKEduSystem\Enums\Qualification;
+use Liamtseva\PGFKEduSystem\Enums\Role;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\TeacherResource\Pages\CreateTeacher;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\TeacherResource\Pages\EditTeacher;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\TeacherResource\Pages\ListTeachers;
@@ -34,6 +35,7 @@ class TeacherResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $isTeacher = auth()->user() && auth()->user()->role === Role::TEACHER;
         return $form
             ->schema([
                 Section::make('Особисті дані')
@@ -63,8 +65,26 @@ class TeacherResource extends Resource
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
+                            ->live() // Робимо поле реактивним
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                // Оновлюємо поле email на основі вибраного user_id
+                                if ($state) {
+                                    $user = User::find($state);
+                                    $set('email', $user?->email);
+                                } else {
+                                    $set('email', null); // Очищаємо, якщо користувач не вибраний
+                                }
+                            })
                             ->placeholder('Оберіть користувача')
-                            ->prefixIcon('heroicon-o-user-circle'),
+                            ->prefixIcon('heroicon-o-user-circle')
+                            ->disabled($isTeacher),
+
+                        TextInput::make('email')
+                            ->label('Пошта')
+                            ->email()
+                            ->required()
+                            ->maxLength(255)
+                            ->prefixIcon('heroicon-o-envelope'),
 
                         Select::make('qualification')
                             ->label('Кваліфікація')
@@ -172,7 +192,7 @@ class TeacherResource extends Resource
                     ->searchable()
                     ->toggleable(),
 
-                TextColumn::make('user.email')
+                TextColumn::make('email')
                     ->label('Пошта')
                     ->sortable()
                     ->searchable()
@@ -203,7 +223,7 @@ class TeacherResource extends Resource
                     ->placeholder('Оберіть кваліфікацію'),
 
                 SelectFilter::make('department')
-                    ->label('Фільтр за кафедрою')
+                    ->label('Фільтр за навчальною частиною')
                     ->options(Department::class)
                     ->placeholder('Оберіть кафедру'),
             ])

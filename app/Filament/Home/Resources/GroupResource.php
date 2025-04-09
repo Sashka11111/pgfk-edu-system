@@ -81,10 +81,9 @@ class GroupResource extends Resource
                         Select::make('teacher_id')
                             ->label('Куратор')
                             ->options(function () {
-                                return Teacher::with('user')
-                                    ->get()
-                                    ->pluck('user.name', 'id')
-                                    ->all();
+                                return Teacher::all()->mapWithKeys(function ($teacher) {
+                                    return [$teacher->id => "{$teacher->last_name} {$teacher->first_name} {$teacher->middle_name}"];
+                                })->all();
                             })
                             ->required()
                             ->searchable()
@@ -124,7 +123,7 @@ class GroupResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->query(Group::query()->with(['teacher.user']))
+            ->query(Group::query()->with(['teacher']))
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
@@ -158,11 +157,22 @@ class GroupResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('teacher')
-                    ->label('Куратор')
-                    ->formatStateUsing(fn ($record) => $record->teacher?->user?->name ?? 'Не призначено')
-                    ->searchable()
-                    ->sortable()
+                TextColumn::make('teacher_full_name') // Кастомна назва для відображення ПІБ
+                ->label('Куратор')
+                    ->state(fn ($record) => $record->teacher ? "{$record->teacher->last_name} {$record->teacher->first_name} {$record->teacher->middle_name}" : 'Не призначено')
+                    ->searchable(query: function ($query, $search) {
+                        $query->whereHas('teacher', function ($query) use ($search) {
+                            $query->where('surname', 'like', "%{$search}%")
+                                ->orWhere('name', 'like', "%{$search}%")
+                                ->orWhere('patronymic', 'like', "%{$search}%");
+                        });
+                    })
+                    ->sortable(query: function ($query, $direction) {
+                        $query->join('teachers', 'groups.teacher_id', '=', 'teachers.id')
+                            ->orderBy('teachers.surname', $direction)
+                            ->orderBy('teachers.name', $direction)
+                            ->orderBy('teachers.patronymic', $direction);
+                    })
                     ->toggleable()
                     ->default('Не призначено'),
 

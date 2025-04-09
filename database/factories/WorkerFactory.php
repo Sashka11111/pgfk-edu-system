@@ -26,6 +26,7 @@ class WorkerFactory extends Factory
             'last_name' => $this->faker->lastName(), // Прізвище
             'first_name' => $this->faker->firstName(), // Ім’я
             'middle_name' => $this->faker->lastName(), // По батькові
+            'email' => fake()->safeEmail(),
             'position' => $this->faker->randomElement(Position::cases()), // Вибираємо випадкове значення з enum Position
             'phone_number' => $this->faker->optional()->phoneNumber(), // Генеруємо номер телефону (або null)
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), // Випадкова дата створення

@@ -28,6 +28,7 @@ class TeacherFactory extends Factory
             'last_name' => $this->faker->lastName(), // Прізвище
             'first_name' => $this->faker->firstName(), // Ім’я
             'middle_name' => $this->faker->lastName(), // По батькові
+            'email' => fake()->safeEmail(),
             'qualification' => $this->faker->randomElement(Qualification::cases()), // Випадкова кваліфікація
             'phone_number' => $this->faker->phoneNumber(), // Генеруємо номер телефону
             'experience_years' => $this->faker->numberBetween(1, 40), // Випадковий досвід у роках

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignUlid('group_id')->nullable()->constrained('groups')->cascadeOnDelete(); // Посилання на групу
             $table->date('enrollment_date')->nullable(); // Дата вступу
             $table->boolean('is_scholarship_holder')->default(false); // Чи отримує стипендію
+            $table->string('email');
             $table->string('birthplace')->nullable(); // Місце народження
             $table->date('birthdate')->nullable(); // Дата народження
             $table->string('phone_number')->nullable(); // Номер телефону

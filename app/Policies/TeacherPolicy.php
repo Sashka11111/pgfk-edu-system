@@ -51,9 +51,6 @@ class TeacherPolicy
      */
     public function update(User $user, Teacher $teacher): bool
     {
-        // Дозволяємо редагувати:
-        // - Адміністраторам
-        // - Викладачу (власний профіль)
         return $user->role === Role::ADMIN ||
             ($user->role === Role::TEACHER && $user->id === $teacher->user_id);
     }

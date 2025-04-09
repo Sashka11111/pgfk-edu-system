@@ -16,18 +16,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="guest-layout">
-<!-- Хедер -->
-<header class="header">
-    <div class="header__container">
-        <a href="{{ url('/') }}" class="header__logo-link">
-            <img src="{{ asset('images/icon.png') }}" alt="Logo" class="header__logo-image">
-        </a>
-        <h2 class="header__title">{{ __('Profile') }}</h2>
-
-    </div>
-</header>
-
-
 
 <!-- Основний вміст -->
 <div class="profile">

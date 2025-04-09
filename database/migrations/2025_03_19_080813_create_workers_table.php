@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('first_name'); // Ім’я
             $table->string('middle_name')->nullable(); // По батькові
             $table->foreignUlid('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('email');
             $table->enumAlterColumn('position', 'position', Position::class);
             $table->string('phone_number')->nullable(); // Номер телефону
             $table->timestamps();

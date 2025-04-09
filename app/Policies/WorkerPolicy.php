@@ -27,7 +27,7 @@ class WorkerPolicy
     public function viewAny(User $user): bool
     {
         // Дозволяємо переглядати список працівників лише адміністраторам
-        return $user->role === Role::ADMIN;
+        return $user->role === Role::ADMIN || $user->role === Role::TEACHER;
     }
 
     /**
@@ -35,9 +35,6 @@ class WorkerPolicy
      */
     public function view(User $user, Worker $worker): bool
     {
-        // Дозволяємо переглядати працівника:
-        // - Адміністраторам
-        // - Самому працівнику (якщо є зв’язок із User)
         return $user->role === Role::ADMIN || $user->role === Role::TEACHER;
     }
 

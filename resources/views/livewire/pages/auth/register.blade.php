@@ -2,6 +2,10 @@
 
 use Illuminate\Validation\Rules\Enum;
 use Liamtseva\PGFKEduSystem\Enums\Gender;
+use Liamtseva\PGFKEduSystem\Enums\Role;
+use Liamtseva\PGFKEduSystem\Models\Student;
+use Liamtseva\PGFKEduSystem\Models\Teacher;
+use Liamtseva\PGFKEduSystem\Models\Worker;
 use Liamtseva\PGFKEduSystem\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -36,13 +40,37 @@ new #[Layout('layouts.guest')] class extends Component {
             'gender' => ['required', new Enum(Gender::class)],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
-
+        $validated['role'] = str_ends_with($validated['email'],
+            '@student.uzhnu.edu.ua') ? 'student' : 'teacher';
         $validated['password'] = Hash::make($validated['password']);
+        $user = User::create($validated);
+        $this->updateRoleSpecificRecord($validated['role'], $validated['email'], $user->id);
 
-        event(new Registered($user = User::create($validated)));
+        // Викликаємо подію Registered і авторизуємо користувача
+        event(new Registered($user));
         Auth::login($user);
 
         redirect()->route('dashboard');
+    }
+
+    private function updateRoleSpecificRecord(string $role, string $email, int $userId): void
+    {
+        // Визначаємо модель залежно від ролі
+        $modelClass = match ($role) {
+            Role::STUDENT->value => Student::class,
+            Role::TEACHER->value => Teacher::class,
+            Role::ADMIN->value => Worker::class,
+            default => null, // Якщо роль не підтримується, нічого не робимо
+        };
+
+        if ($modelClass) {
+            $record = $modelClass::where('email', $email)->first();
+            if ($record) {
+                $record->update(['user_id' => $userId]);
+            } else {
+                \Log::warning("Запис для ролі {$role} з email {$email} не знайдено.");
+            }
+        }
     }
 }; ?>
 
@@ -84,7 +112,8 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
         <!-- Gender -->
         <div class="login-form__field">
-            <select wire:model="gender" id="gender" name="gender" class="login-form__select" required>
+            <select wire:model="gender" id="gender" name="gender" class="login-form__select"
+                    required>
                 <option value="">{{ __('Оберіть стать') }}</option>
                 @foreach (Gender::cases() as $genderOption)
                     <option value="{{ $genderOption->value }}">
@@ -92,7 +121,7 @@ new #[Layout('layouts.guest')] class extends Component {
                     </option>
                 @endforeach
             </select>
-            <x-input-error :messages="$errors->get('gender')" class="login-form__error" />
+            <x-input-error :messages="$errors->get('gender')" class="login-form__error"/>
         </div>
 
 

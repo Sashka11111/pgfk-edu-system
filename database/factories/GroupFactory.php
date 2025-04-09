@@ -24,7 +24,7 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->bothify('??-##'), // Наприклад, "AB-123"
+            'name' => $this->faker->unique()->bothify('??-##'),
             'year_of_study' => $this->faker->numberBetween(1, 4), // Рік навчання від 1 до 5
             'study_form' => fake()->randomElement([StudyForm::FULL_TIME->value,StudyForm::PART_TIME->value, StudyForm::DISTANCE->value]),
             'specialty_id' => Specialty::query()->inRandomOrder()->value('id') ?? null, // Випадкова спеціальність
