@@ -37,6 +37,9 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+    "post-install-cmd": [
+        "php artisan key:generate --force"
+    ],
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
