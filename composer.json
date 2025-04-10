@@ -16,8 +16,7 @@
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.7.0",
         "mallardduck/blade-boxicons": "^2.4",
-        "owenvoke/blade-fontawesome": "^2.9",
-        "ext-http": "*"
+        "owenvoke/blade-fontawesome": "^2.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
