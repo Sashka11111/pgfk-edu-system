@@ -53,7 +53,7 @@ new #[Layout('layouts.guest')] class extends Component {
         redirect()->route('dashboard');
     }
 
-    private function updateRoleSpecificRecord(string $role, string $email, int $userId): void
+    private function updateRoleSpecificRecord(string $role, string $email, string $userId): void
     {
         // Визначаємо модель залежно від ролі
         $modelClass = match ($role) {

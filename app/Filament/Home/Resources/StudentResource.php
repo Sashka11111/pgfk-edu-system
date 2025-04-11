@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Liamtseva\PGFKEduSystem\Enums\Role;
+use Liamtseva\PGFKEduSystem\Filament\Home\Pages\Dashboard;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\CreateStudent;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\EditStudent;
 use Liamtseva\PGFKEduSystem\Filament\Home\Resources\StudentResource\Pages\ListStudents;
@@ -204,9 +205,9 @@ class StudentResource extends Resource
 
     public static function table(Table $table): Table
     {
-        // Таблиця доступна лише для не-студентів
+        // Таблиця доступна лише для студентів
         if (auth()->user() && auth()->user()->role === Role::STUDENT) {
-            abort(403, 'Доступ до списку студентів заборонено.');
+            abort(403, "Доступ до списку студентів заборонено.");
         }
 
         $query = Student::query()->with(['user', 'group']);
@@ -374,16 +375,15 @@ class StudentResource extends Resource
      */
     public static function getNavigationUrl(): string
     {
-        if (auth()->user() && auth()->user()->role === Role::STUDENT) {
+        if (auth()->check() && auth()->user()->role === Role::STUDENT) {
             $student = Student::where('user_id', auth()->id())->first();
             if ($student) {
                 return static::getUrl('view', ['record' => $student->id]);
             }
-            // Якщо студента не знайдено, можна перенаправити куди завгодно
-            return route('dashboard'); // або інший маршрут
+            // Якщо студент не знайдений, кидаємо помилку 403
+            abort(403, 'Доступ до списку студентів заборонено.');
         }
 
-        // Для інших ролей повертаємо стандартний URL списку студентів
-        return static::getUrl('index');
+        return static::getUrl(Dashboard::class); // Для інших ролей
     }
 }
