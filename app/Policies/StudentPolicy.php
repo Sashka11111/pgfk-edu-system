@@ -26,7 +26,13 @@ class StudentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        // Забороняємо студентам без запису в таблиці Student
+        if ($user->role === Role::STUDENT) {
+            $student = Student::where('user_id', $user->id)->first();
+            return $student !== null; // Доступ, якщо є запис
+        }
+
+        return true; // Інші ролі мають доступ
     }
 
     /**
@@ -34,7 +40,17 @@ class StudentPolicy
      */
     public function view(User $user, Student $student): bool
     {
-        return true;
+        // Студент без запису в таблиці Student не має доступу
+        if ($user->role === Role::STUDENT) {
+            $userStudent = Student::where('user_id', $user->id)->first();
+            if ($userStudent === null) {
+                return false; // Немає запису — доступ заборонено
+            }
+            // Дозволяємо студенту бачити лише свій профіль
+            return $user->id === $student->user_id;
+        }
+
+        return true; // Інші ролі мають доступ
     }
 
     /**
