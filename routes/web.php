@@ -17,13 +17,13 @@ Route::view('profile', 'profile')
 
 Route::get('/email/verify', function () {
     return view('livewire.pages.auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+})->middleware('auth')->name('verification.blade.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
     return redirect('/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+})->middleware(['auth', 'signed'])->name('verification.blade.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
