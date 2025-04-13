@@ -78,3 +78,22 @@ server {
     }
 }
 EOL
+
+# Спроба копіювання конфігурації Nginx (може потребувати прав адміністратора)
+if [ -d "/etc/nginx/sites-available" ]; then
+    # Спроба копіювання без sudo
+    cp /home/site/wwwroot/default.conf /etc/nginx/sites-available/default 2>/dev/null || echo "Could not copy Nginx config (may need admin rights)"
+
+    # Спроба перезапуску Nginx
+    service nginx reload 2>/dev/null || echo "Could not reload Nginx (may need admin rights)"
+fi
+
+# Альтернативний шлях для Azure App Service
+if [ -d "/home/site/wwwroot" ]; then
+    # Створення символічного посилання в директорії, яку може використовувати Nginx
+    mkdir -p /home/site/nginx
+    cp /home/site/wwwroot/default.conf /home/site/nginx/default.conf
+
+    # Створення файлу для Azure, який може вказувати на конфігурацію Nginx
+    echo "NGINX_CONF_PATH=/home/site/nginx/default.conf" > /home/site/wwwroot/.env.nginx
+fi
