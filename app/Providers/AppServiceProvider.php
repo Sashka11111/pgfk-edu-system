@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Liamtseva\PGFKEduSystem\Enums\Role;
 use Liamtseva\PGFKEduSystem\Models\User;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         Section::configureUsing(fn ($component) => $component->iconColor('primary'));
         Model::unguard();
         Model::shouldBeStrict();
+        URL::forceHttps();
     }
 
 }
