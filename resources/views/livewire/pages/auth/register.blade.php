@@ -43,13 +43,11 @@ new #[Layout('layouts.guest')] class extends Component {
         $validated['role'] = str_ends_with($validated['email'],
             '@student.uzhnu.edu.ua') ? 'student' : 'teacher';
         $validated['password'] = Hash::make($validated['password']);
-        $user = User::create($validated);
+        event(new Registered($user = User::create($validated)));
+
         $this->updateRoleSpecificRecord($validated['role'], $validated['email'], $user->id);
 
-        // Викликаємо подію Registered і авторизуємо користувача
-        event(new Registered($user));
         Auth::login($user);
-
         redirect()->route('dashboard');
     }
 

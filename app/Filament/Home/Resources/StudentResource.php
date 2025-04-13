@@ -384,6 +384,6 @@ class StudentResource extends Resource
             abort(403, 'Доступ до списку студентів заборонено.');
         }
 
-        return static::getUrl(Dashboard::class); // Для інших ролей
+        return static::getUrl('index'); // Для інших ролей
     }
 }
