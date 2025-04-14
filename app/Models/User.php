@@ -2,6 +2,7 @@
 
 namespace Liamtseva\PGFKEduSystem\Models;
 
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -42,7 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return auth()->check();  // Перевіряє, чи користувач аутентифікований
     }
 
-
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
     /**
      * Автоматичне приведення типів.
      *
