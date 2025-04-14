@@ -54,6 +54,7 @@ jobs:
           sed -i 's/APP_ENV=.*/APP_ENV=production/' .env
           sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env
           sed -i 's#APP_URL=.*#APP_URL=${{ secrets.APP_URL }}#' .env
+          sed -i 's#APP_KEY=.*#APP_KEY=${{ secrets.APP_KEY }}#' .env
 
           # Налаштування бази даних
           sed -i 's/DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/' .env
@@ -73,7 +74,6 @@ jobs:
           sed -i 's/MAIL_FROM_NAME=.*/MAIL_FROM_NAME="College UzhNU"/' .env
 
           # Генеруємо ключ та кешуємо конфігурацію
-          php artisan key:generate --force
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
