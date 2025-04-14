@@ -88,7 +88,6 @@ if [ -d "/etc/nginx/sites-available" ]; then
     service nginx reload 2>/dev/null || echo "Could not reload Nginx (may need admin rights)"
 fi
 
-# Альтернативний шлях для Azure App Service
 if [ -d "/home/site/wwwroot" ]; then
     # Створення символічного посилання в директорії, яку може використовувати Nginx
     mkdir -p /home/site/nginx
